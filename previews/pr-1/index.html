@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ダーツ アレンジ</title>
+    <style>
+      body {
+        font-family: sans-serif;
+        display: flex;
+        justify-content: center;
+        padding: 20px;
+        background-color: #f0f2f5;
+      }
+      .card {
+        background: white;
+        padding: 2rem;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        width: 100%;
+        max-width: 400px;
+      }
+      h1 {
+        font-size: 1.25rem;
+        margin-bottom: 1rem;
+        color: #1a73e8;
+      }
+      input {
+        width: 100%;
+        padding: 8px;
+        margin-bottom: 1rem;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        box-sizing: border-box;
+      }
+      button {
+        width: 100%;
+        padding: 10px;
+        background-color: #1a73e8;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+      }
+      button:hover {
+        background-color: #1557b0;
+      }
+      ul {
+        margin-top: 1.5rem;
+        padding-left: 0;
+        list-style: none;
+      }
+      li {
+        padding: 8px;
+        border-bottom: 1px solid #eee;
+        color: #3c4043;
+      }
+      li:last-child {
+        border-bottom: none;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="card">
+      <h1>ダーツ アレンジ</h1>
+      <input type="number" id="numberInput" placeholder="数字を入力してください" />
+      <button id="calcButton">実行</button>
+      <ul id="resultList"></ul>
+    </div>
+    <script src="dist/main.js"></script>
+  </body>
+</html>
