@@ -10,6 +10,7 @@ permissions:
   contents: write
   pages: write
   id-token: write
+  pull-requests: write
 
 jobs:
   build-and-deploy:
@@ -46,3 +47,12 @@ jobs:
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./dist
+
+      - name: Comment PR Preview URL
+        if: github.event_name == 'pull_request'
+        uses: thollander/actions-comment-pull-request@v2
+        with:
+          message: |
+            🚀 PR Preview Deployment Complete!
+            🔍 View here: https://unaya11.github.io/darts-arrange/previews/pr-${{ github.event.number }}/
+          comment_tag: preview_url
