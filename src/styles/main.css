@@ -51,28 +51,33 @@ li {
 li:last-child {
   border-bottom: none;
 }
-/* ダイアログ自体の設定 */
 dialog {
-  width: 80%; /* 横幅 */
-  max-height: 70vh; /* 画面の高さの70%までに制限（これが重要！） */
-  padding: 0; /* 内部の余白はdivで制御 */
-  border-radius: 8px;
+  width: 90%;
+  max-height: 80vh;
+  padding: 0;
   border: none;
+  border-radius: 12px;
+  overflow: hidden;
 }
-
-/* 結果表示エリア（スクロール担当） */
-.scroll-area {
-  padding: 20px;
-  overflow-y: auto; /* 中身がはみ出したらスクロールバーを出す */
-  max-height: calc(70vh - 60px); /* ダイアログの高さ - ボタンの高さ */
+.dialog-inner {
+  display: flex;
+  flex-direction: column;
+  height: 80vh;
 }
-
-/* フッター（ボタン固定担当） */
-.dialog-footer {
-  position: sticky; /* 下に張り付かせる */
-  bottom: 0;
-  background: white; /* 背景を白くして透けないようにする */
+.dialog-header {
   padding: 10px;
-  text-align: center;
+  background: #f8f9fa;
+  border-bottom: 1px solid #eee;
+  font-weight: bold;
+}
+.dialog-body {
+  flex: 1;
+  overflow-y: auto;
+  padding: 20px;
+}
+.dialog-footer {
+  padding: 10px;
   border-top: 1px solid #eee;
+  text-align: center;
+  background: white;
 }

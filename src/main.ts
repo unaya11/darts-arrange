@@ -26,6 +26,13 @@ closeButton?.addEventListener('click', () => {
 });
 
 function calcScore() {
+  if (!resultElement) return;
+  const title = document.getElementById('dialogTitle');
+  if (title) {
+    title.textContent = inputNumber?.value + ' のアレンジ';
+  }
+  resultElement.innerHTML = '';
+
   const list: number[] = [];
   for (const first of allScores) {
     for (const second of allScores) {
@@ -41,16 +48,9 @@ function calcScore() {
   const viewList: number[][] = [];
   for (let i = 0; i < list.length; i += 3) {
     const chunk = list.slice(i, i + 3);
-    viewList.push(chunk);
-  }
-  console.log(viewList);
-  if (resultElement?.textContent) {
-    resultElement.textContent = inputNumber?.value + 'のアレンジ';
-    viewList.forEach((text) => {
-      const p = document.createElement('p');
-      p.textContent = text.join(', ');
-      resultElement.appendChild(p);
-    });
+    const p = document.createElement('p');
+    p.textContent = chunk.join(' - ');
+    resultElement.appendChild(p);
   }
 }
 

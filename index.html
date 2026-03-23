@@ -11,9 +11,16 @@
       <input type="number" id="numberInput" placeholder="数字を入力してください" />
       <button id="showDialog">計算</button>
       <dialog>
-        <div id="dialogBox" class="scroll-area">のアレンジ</div>
-        <div class="dialog-footer">
-          <button id="closeDialog">とじる</button>
+        <div class="dialog-inner">
+          <header class="dialog-header">
+            <h3 id="dialogTitle">アレンジ</h3>
+          </header>
+
+          <div id="dialogBox" class="dialog-body"></div>
+
+          <footer class="dialog-footer">
+            <button id="closeDialog">とじる</button>
+          </footer>
         </div>
       </dialog>
       <ul id="resultList"></ul>
