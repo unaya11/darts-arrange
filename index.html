@@ -9,7 +9,13 @@
     <div class="card">
       <h1>ダーツ アレンジ</h1>
       <input type="number" id="numberInput" placeholder="数字を入力してください" />
-      <button id="calcButton">実行</button>
+      <button id="showDialog">計算</button>
+      <dialog>
+        <div id="dialogBox" class="scroll-area">のアレンジ</div>
+        <div class="dialog-footer">
+          <button id="closeDialog">とじる</button>
+        </div>
+      </dialog>
       <ul id="resultList"></ul>
     </div>
     <script type="module" src="/src/main.ts"></script>
