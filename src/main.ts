@@ -75,5 +75,8 @@ function getCheckBoxValues(): string[] {
 
 // 3本目が選択されたスコアかどうかを確認
 function isTarget(thirdScore: number, getCheckBoxValues: string[]): boolean {
+  if (getCheckBoxValues[0] === undefined) {
+    return true;
+  }
   return getCheckBoxValues.includes(thirdScore.toString());
 }
