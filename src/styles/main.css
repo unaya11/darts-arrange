@@ -81,3 +81,8 @@ dialog {
   text-align: center;
   background: white;
 }
+.check-group {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
