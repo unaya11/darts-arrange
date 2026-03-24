@@ -13,7 +13,7 @@ const allScores = [...singleNumbers, ...dobuleNumbers, ...tripleNumbers, ...bull
 
 showButton?.addEventListener('click', () => {
   if (dialog) {
-    calcScore();
+    createView();
     dialog.showModal();
   }
 });
@@ -25,7 +25,7 @@ closeButton?.addEventListener('click', () => {
   }
 });
 
-function calcScore() {
+function createView() {
   if (!resultElement) return;
   const title = document.getElementById('dialogTitle');
   if (title) {
@@ -33,25 +33,47 @@ function calcScore() {
   }
   resultElement.innerHTML = '';
 
-  const list: number[] = [];
-  for (const first of allScores) {
-    for (const second of allScores) {
-      for (const third of leftNumbers) {
-        const score = first + second + third;
-        if (inputNumber?.valueAsNumber == score) {
-          list.push(first, second, third);
-        }
-      }
-    }
-  }
+  const calcScoreList = calcScore();
 
-  const viewList: number[][] = [];
-  for (let i = 0; i < list.length; i += 3) {
-    const chunk = list.slice(i, i + 3);
+  for (let i = 0; i < calcScoreList.length; i += 3) {
+    const chunk = calcScoreList.slice(i, i + 3);
     const p = document.createElement('p');
     p.textContent = chunk.join(' - ');
     resultElement.appendChild(p);
   }
 }
 
-function checkScore() {}
+function calcScore(): number[] {
+  const a = getCheckBoxValues();
+  const leftList: number[] = [];
+  for (const first of allScores) {
+    for (const second of allScores) {
+      for (const third of leftNumbers) {
+        if (isTarget(third, a)) {
+          const score = first + second + third;
+          if (inputNumber?.valueAsNumber == score) {
+            leftList.push(first, second, third);
+          }
+        }
+      }
+    }
+  }
+  return leftList;
+}
+
+// チェックボックスの状態を取得
+function getCheckBoxValues(): string[] {
+  const selectLeftNumber = document.querySelectorAll<HTMLInputElement>(
+    'input[type=checkbox]:checked',
+  );
+  const values: string[] = [];
+  selectLeftNumber.forEach((node) => {
+    values.push(node.value);
+  });
+  return values;
+}
+
+// 3本目が選択されたスコアかどうかを確認
+function isTarget(thirdScore: number, getCheckBoxValues: string[]): boolean {
+  return getCheckBoxValues.includes(thirdScore.toString());
+}

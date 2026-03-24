@@ -18,7 +18,7 @@ h1 {
   margin-bottom: 1rem;
   color: #1a73e8;
 }
-input {
+#numberInput {
   width: 100%;
   padding: 8px;
   margin-bottom: 1rem;
