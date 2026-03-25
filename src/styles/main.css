@@ -86,3 +86,8 @@ dialog {
   gap: 10px;
   flex-wrap: wrap;
 }
+.errorMessage {
+  color: red;
+  font-size: 0.8rem;
+  height: 1.2rem;
+}
