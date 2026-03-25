@@ -1,8 +1,18 @@
 import './styles/main.css';
 const dialog = document.querySelector<HTMLDialogElement>('dialog');
 const showButton = document.querySelector<HTMLDialogElement>('#showDialog');
-const inputNumber = document.querySelector<HTMLInputElement>('#numberInput');
 const resultElement = document.getElementById('dialogBox');
+const title = document.querySelector('#errorMessage');
+const inputNumber = () => {
+  const el = document.querySelector<HTMLInputElement>('#numberInput');
+  if (!el || el.value === '') {
+    if (title) {
+      title.textContent = '数字を入力してください';
+    }
+    return;
+  }
+  return el;
+};
 
 const singleNumbers = Array.from({ length: 20 }, (_, i) => i + 1);
 const dobuleNumbers = Array.from({ length: 20 }, (_, i) => (i + 1) * 2);
@@ -13,6 +23,12 @@ const allScores = [...singleNumbers, ...dobuleNumbers, ...tripleNumbers, ...bull
 
 showButton?.addEventListener('click', () => {
   if (dialog) {
+    if (title) {
+      title.textContent = '';
+    }
+    if (inputNumber() === undefined) {
+      return;
+    }
     createView();
     dialog.showModal();
   }
@@ -29,7 +45,7 @@ function createView() {
   if (!resultElement) return;
   const title = document.getElementById('dialogTitle');
   if (title) {
-    title.textContent = inputNumber?.value + ' のアレンジ';
+    title.textContent = inputNumber()?.value + ' のアレンジ';
   }
   resultElement.innerHTML = '';
 
@@ -51,7 +67,7 @@ function calcScore(): number[] {
       for (const third of leftNumbers) {
         if (isTarget(third, a)) {
           const score = first + second + third;
-          if (inputNumber?.valueAsNumber == score) {
+          if (inputNumber()?.valueAsNumber === score) {
             leftList.push(first, second, third);
           }
         }
@@ -75,7 +91,7 @@ function getCheckBoxValues(): string[] {
 
 // 3本目が選択されたスコアかどうかを確認
 function isTarget(thirdScore: number, getCheckBoxValues: string[]): boolean {
-  if (getCheckBoxValues[0] === undefined) {
+  if (getCheckBoxValues.length === 0) {
     return true;
   }
   return getCheckBoxValues.includes(thirdScore.toString());

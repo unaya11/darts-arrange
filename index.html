@@ -9,6 +9,9 @@
     <div class="card">
       <h1>ダーツ アレンジ</h1>
       <input type="number" id="numberInput" placeholder="数字を入力してください" />
+      <div class="input-group">
+        <div id="errorMessage" style="color: red; font-size: 0.8rem; height: 1.2rem"></div>
+      </div>
       <div id="arrangeNumber" class="check-group">
         <div>
           <input type="checkbox" value="40" checked />
@@ -39,7 +42,7 @@
       <dialog>
         <div class="dialog-inner">
           <header class="dialog-header">
-            <h3 id="dialogTitle">アレンジ</h3>
+            <h3 id="dialogTitle"></h3>
           </header>
 
           <div id="dialogBox" class="dialog-body"></div>
