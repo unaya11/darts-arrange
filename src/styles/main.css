@@ -1,93 +1,121 @@
+:root {
+  --primary-color: #1a73e8;
+  --primary-hover: #1557b0;
+  --error-color: #d93025;
+  --bg-color: #f0f2f5;
+  --card-bg: #ffffff;
+  --border-color: #cccccc;
+  --text-main: #3c4043;
+  --radius-std: 8px;
+  --radius-sm: 4px;
+  --shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
 body {
   font-family: sans-serif;
   display: flex;
   justify-content: center;
-  padding: 20px;
-  background-color: #f0f2f5;
+  padding: 1.25rem; /* 20px */
+  background-color: var(--bg-color);
+  color: var(--text-main);
+  margin: 0;
 }
+
 .card {
-  background: white;
+  background: var(--card-bg);
   padding: 2rem;
-  border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  border-radius: var(--radius-std);
+  box-shadow: var(--shadow);
   width: 100%;
   max-width: 400px;
 }
+
 h1 {
   font-size: 1.25rem;
   margin-bottom: 1rem;
-  color: #1a73e8;
+  color: var(--primary-color);
 }
+
 #numberInput {
   width: 100%;
-  padding: 8px;
-  margin-bottom: 1rem;
-  border: 1px solid #ccc;
-  border-radius: 4px;
+  padding: 0.5rem;
+  margin-bottom: 0.25rem;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
   box-sizing: border-box;
 }
+
+.errorMessage {
+  color: var(--error-color);
+  font-size: 0.8rem;
+  height: 1.2rem;
+  margin-bottom: 0.75rem;
+}
+
+.check-group {
+  display: flex;
+  gap: 0.625rem; /* 10px */
+  flex-wrap: wrap;
+  margin-bottom: 1.5rem;
+}
+
 button {
   width: 100%;
-  padding: 10px;
-  background-color: #1a73e8;
+  padding: 0.625rem;
+  background-color: var(--primary-color);
   color: white;
   border: none;
-  border-radius: 4px;
+  border-radius: var(--radius-sm);
   cursor: pointer;
+  transition: background-color 0.2s;
 }
+
 button:hover {
-  background-color: #1557b0;
+  background-color: var(--primary-hover);
 }
-ul {
-  margin-top: 1.5rem;
-  padding-left: 0;
-  list-style: none;
-}
-li {
-  padding: 8px;
-  border-bottom: 1px solid #eee;
-  color: #3c4043;
-}
-li:last-child {
-  border-bottom: none;
-}
+
 dialog {
   width: 90%;
+  max-width: 500px;
   max-height: 80vh;
   padding: 0;
   border: none;
   border-radius: 12px;
-  overflow: hidden;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
 }
+
 .dialog-inner {
   display: flex;
   flex-direction: column;
   height: 80vh;
 }
+
 .dialog-header {
-  padding: 10px;
+  padding: 1rem;
   background: #f8f9fa;
-  border-bottom: 1px solid #eee;
+  border-bottom: 1px solid #eeeeee;
   font-weight: bold;
 }
+
 .dialog-body {
   flex: 1;
   overflow-y: auto;
-  padding: 20px;
+  padding: 1.25rem;
 }
+
+.dialog-body p {
+  padding: 0.5rem;
+  border-bottom: 1px solid #eeeeee;
+  margin: 0;
+}
+
+.dialog-body p:last-child {
+  border-bottom: none;
+}
+
 .dialog-footer {
-  padding: 10px;
-  border-top: 1px solid #eee;
+  padding: 1rem;
+  border-top: 1px solid #eeeeee;
   text-align: center;
   background: white;
-}
-.check-group {
-  display: flex;
-  gap: 10px;
-  flex-wrap: wrap;
-}
-.errorMessage {
-  color: red;
-  font-size: 0.8rem;
-  height: 1.2rem;
 }
