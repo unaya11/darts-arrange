@@ -2,12 +2,12 @@ import './styles/main.css';
 const dialog = document.querySelector<HTMLDialogElement>('dialog');
 const showButton = document.querySelector<HTMLDialogElement>('#showDialog');
 const resultElement = document.getElementById('dialogBox');
-const title = document.querySelector('#errorMessage');
+const errorDisplay = document.querySelector('#errorMessage');
 const inputNumber = () => {
   const el = document.querySelector<HTMLInputElement>('#numberInput');
   if (!el || el.value === '') {
-    if (title) {
-      title.textContent = '数字を入力してください';
+    if (errorDisplay) {
+      errorDisplay.textContent = '数字を入力してください';
     }
     return;
   }
@@ -22,14 +22,24 @@ const bull = [25, 50];
 const allScores = [...singleNumbers, ...dobuleNumbers, ...tripleNumbers, ...bull];
 
 showButton?.addEventListener('click', () => {
+  const calcScoreList = calcScore();
   if (dialog) {
-    if (title) {
-      title.textContent = '';
+    if (errorDisplay) {
+      errorDisplay.textContent = '';
     }
     if (inputNumber() === undefined) {
       return;
     }
-    createView();
+
+    if (calcScoreList.length === 0) {
+      {
+        if (errorDisplay) {
+          errorDisplay.textContent = '選択した3本目での上がり目が存在しません';
+          return;
+        }
+      }
+    }
+    createView(calcScoreList);
     dialog.showModal();
   }
 });
@@ -41,15 +51,13 @@ closeButton?.addEventListener('click', () => {
   }
 });
 
-function createView() {
+function createView(calcScoreList: number[]) {
   if (!resultElement) return;
   const title = document.getElementById('dialogTitle');
   if (title) {
     title.textContent = inputNumber()?.value + ' のアレンジ';
   }
   resultElement.innerHTML = '';
-
-  const calcScoreList = calcScore();
 
   for (let i = 0; i < calcScoreList.length; i += 3) {
     const chunk = calcScoreList.slice(i, i + 3);
@@ -60,12 +68,12 @@ function createView() {
 }
 
 function calcScore(): number[] {
-  const a = getCheckBoxValues();
+  const selectLeftNumberList = getCheckBoxValues();
   const leftList: number[] = [];
   for (const first of allScores) {
     for (const second of allScores) {
       for (const third of leftNumbers) {
-        if (isTarget(third, a)) {
+        if (isTarget(third, selectLeftNumberList)) {
           const score = first + second + third;
           if (inputNumber()?.valueAsNumber === score) {
             leftList.push(first, second, third);
