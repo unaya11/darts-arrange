@@ -14,12 +14,17 @@ const inputNumber = () => {
   return el;
 };
 
-const singleNumbers = Array.from({ length: 20 }, (_, i) => i + 1);
-const dobuleNumbers = Array.from({ length: 20 }, (_, i) => (i + 1) * 2);
-const tripleNumbers = Array.from({ length: 20 }, (_, i) => (i + 1) * 3);
-const leftNumbers = [...dobuleNumbers, 50];
+const numbers = Array.from({ length: 20 }, (_, i) => i + 1);
 const bull = [25, 50];
-const allScores = [...singleNumbers, ...dobuleNumbers, ...tripleNumbers, ...bull];
+const leftNumbers = [...numbers.flatMap((num) => [num * 2]), 50];
+// 結果を降順に表示するため、reverseする。reverse()が元の配列を反転させるためslice()でコピーする
+const allNumbers = [
+  ...numbers
+    .slice()
+    .reverse()
+    .flatMap((num) => [num * 3, num * 2, num]),
+  ...bull,
+];
 
 showButton?.addEventListener('click', () => {
   const calcScoreList = calcScore();
@@ -70,8 +75,8 @@ function createView(calcScoreList: number[]) {
 function calcScore(): number[] {
   const selectLeftNumberList = getCheckBoxValues();
   const leftList: number[] = [];
-  for (const first of allScores) {
-    for (const second of allScores) {
+  for (const first of allNumbers) {
+    for (const second of allNumbers) {
       for (const third of leftNumbers) {
         if (isTarget(third, selectLeftNumberList)) {
           const score = first + second + third;
