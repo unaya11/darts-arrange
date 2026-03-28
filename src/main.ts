@@ -6,7 +6,7 @@ const errorDisplay = document.querySelector('#errorMessage');
 const checks = document.querySelectorAll<HTMLInputElement>('.checks');
 const checkall = document.querySelector<HTMLInputElement>('.checkAlls');
 
-const inputNumber = () => {
+const getInputNumber = () => {
   const el = document.querySelector<HTMLInputElement>('#numberInput');
   if (!el || el.value === '') {
     if (errorDisplay) {
@@ -42,7 +42,7 @@ showButton?.addEventListener('click', () => {
     if (errorDisplay) {
       errorDisplay.textContent = '';
     }
-    if (inputNumber() === undefined) {
+    if (getInputNumber() === undefined) {
       return;
     }
 
@@ -70,7 +70,7 @@ function createView(calcScoreList: number[]) {
   if (!resultElement) return;
   const title = document.getElementById('dialogTitle');
   if (title) {
-    title.textContent = inputNumber()?.value + ' のアレンジ';
+    title.textContent = getInputNumber()?.value + ' のアレンジ';
   }
   resultElement.innerHTML = '';
 
@@ -83,14 +83,26 @@ function createView(calcScoreList: number[]) {
 }
 
 function calcScore(): number[] {
-  const selectLeftNumberList = getCheckBoxValues();
+  const selectLeftNumber = document.querySelectorAll<HTMLInputElement>(
+    'input[type=checkbox]:checked.checks',
+  );
+  const selectLeftNumberList = getSelectedItems(selectLeftNumber);
+
+  const selectFirstNumber = document.querySelectorAll<HTMLInputElement>(
+    'input[type=checkbox]:checked.first-checks',
+  );
+  const selectFirstNumberList = getSelectedItems(selectFirstNumber);
+
   const leftList: number[] = [];
   for (const first of allNumbers) {
+    if (!selectFirstNumberList.includes(first.toString())) {
+      continue;
+    }
     for (const second of allNumbers) {
       for (const third of leftNumbers) {
         if (isTarget(third, selectLeftNumberList)) {
           const score = first + second + third;
-          if (inputNumber()?.valueAsNumber === score) {
+          if (getInputNumber()?.valueAsNumber === score) {
             leftList.push(first, second, third);
           }
         }
@@ -101,10 +113,7 @@ function calcScore(): number[] {
 }
 
 // チェックボックスの状態を取得
-function getCheckBoxValues(): string[] {
-  const selectLeftNumber = document.querySelectorAll<HTMLInputElement>(
-    'input[type=checkbox]:checked',
-  );
+function getSelectedItems(selectLeftNumber: NodeListOf<HTMLInputElement>): string[] {
   const values: string[] = [];
   selectLeftNumber.forEach((node) => {
     values.push(node.value);
