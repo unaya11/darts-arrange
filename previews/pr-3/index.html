@@ -4,8 +4,8 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>ダーツ アレンジ</title>
-    <script type="module" crossorigin src="/darts-arrange/previews/pr-3/assets/index-CpXe6agy.js"></script>
-    <link rel="stylesheet" crossorigin href="/darts-arrange/previews/pr-3/assets/index-D9UPwo4D.css">
+    <script type="module" crossorigin src="/darts-arrange/previews/pr-3/assets/index-CECZGtKW.js"></script>
+    <link rel="stylesheet" crossorigin href="/darts-arrange/previews/pr-3/assets/index-DkLvbVjO.css">
   </head>
   <body>
     <div class="card">
@@ -14,39 +14,45 @@
       <div class="input-group">
         <div id="errorMessage" class="errorMessage"></div>
       </div>
-      <div id="arrangeNumber" class="check-group">
-        <div>
-          <input type="checkbox" value="50" class="checks" />
-          <label for="50">50</label>
-        </div>
-        <div>
-          <input type="checkbox" value="40" class="checks" checked />
-          <label for="40">40</label>
-        </div>
-        <div>
-          <input type="checkbox" value="36" class="checks" checked />
-          <label for="36">36</label>
-        </div>
-        <div>
-          <input type="checkbox" value="32" class="checks" checked />
-          <label for="32">32</label>
-        </div>
-        <div>
-          <input type="checkbox" value="28" class="checks" checked />
-          <label for="28">28</label>
-        </div>
-        <div>
-          <input type="checkbox" value="24" class="checks" checked />
-          <label for="24">24</label>
-        </div>
-        <div>
-          <input type="checkbox" value="16" class="checks" checked />
-          <label for="16">16</label>
-        </div>
-        <div>
-          <input type="checkbox" value="全て選択" class="checkAlls" />
-          <label for="全て選択">全て選択</label>
-        </div>
+      <div class="settings-container">
+        <fieldset class="setting-group">
+          <legend class="setting-legend">🎯 上がり目の指定</legend>
+          <div id="arrangeNumber" class="check-group">
+            <div>
+              <input type="checkbox" value="50" class="checks" id="check-50" />
+              <label for="50">50</label>
+            </div>
+            <div>
+              <input type="checkbox" value="40" class="checks" id="check-40" checked />
+              <label for="40">40</label>
+            </div>
+            <div>
+              <input type="checkbox" value="36" class="checks" id="check-36" checked />
+              <label for="36">36</label>
+            </div>
+            <div>
+              <input type="checkbox" value="32" class="checks" id="check-32" checked />
+              <label for="32">32</label>
+            </div>
+            <div>
+              <input type="checkbox" value="28" class="checks" id="check-28" checked />
+              <label for="28">28</label>
+            </div>
+            <div>
+              <input type="checkbox" value="24" class="checks" id="check-24" checked />
+              <label for="24">24</label>
+            </div>
+            <div>
+              <input type="checkbox" value="16" class="checks" id="check-16" checked />
+              <label for="16">16</label>
+            </div>
+
+            <div class="all-select-wrapper">
+              <input type="checkbox" value="全て選択" class="checkAlls" id="check-all" />
+              <label for="check-all" class="all-select-label">全て選択</label>
+            </div>
+          </div>
+        </fieldset>
       </div>
       <button id="showDialog">計算</button>
       <dialog>
