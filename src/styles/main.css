@@ -119,3 +119,52 @@ dialog {
   text-align: center;
   background: white;
 }
+
+.settings-container {
+  margin-top: 20px;
+}
+
+.setting-group {
+  border: 1px solid #ccc;
+  padding: 15px;
+  border-radius: 8px;
+  margin: 20px 0;
+}
+
+.setting-group legend {
+  padding: 0 10px;
+  font-weight: bold;
+}
+
+.check-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  align-items: center;
+}
+
+.all-select-wrapper {
+  border-left: 1px solid #eee;
+  padding-left: 10px;
+  margin-left: 5px;
+}
+
+.all-select-label {
+  color: #007bff;
+  font-weight: bold;
+}
+
+.check-group label {
+  cursor: pointer;
+}
+
+.check-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  align-items: center;
+}
+.setting-legend {
+  padding: 0 10px;
+  font-weight: bold;
+}
