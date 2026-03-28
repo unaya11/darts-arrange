@@ -3,6 +3,9 @@ const dialog = document.querySelector<HTMLDialogElement>('dialog');
 const showButton = document.querySelector<HTMLDialogElement>('#showDialog');
 const resultElement = document.getElementById('dialogBox');
 const errorDisplay = document.querySelector('#errorMessage');
+const checks = document.querySelectorAll<HTMLInputElement>('.checks');
+const checkall = document.querySelector<HTMLInputElement>('.checkAlls');
+
 const inputNumber = () => {
   const el = document.querySelector<HTMLInputElement>('#numberInput');
   if (!el || el.value === '') {
@@ -25,6 +28,13 @@ const allNumbers = [
     .flatMap((num) => [num * 3, num * 2, num]),
   ...bull,
 ];
+
+checkall?.addEventListener('click', () => {
+  const isChecked = checkall.checked;
+  checks.forEach((check) => {
+    check.checked = isChecked;
+  });
+});
 
 showButton?.addEventListener('click', () => {
   const calcScoreList = calcScore();
