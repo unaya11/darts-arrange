@@ -129,7 +129,7 @@ function getSelectedItems(selectLeftNumber: NodeListOf<HTMLInputElement>): numbe
   return values;
 }
 
-// 3本目が選択された上がり目と一致するかを確認
+// 選択された上がり目と3本目のスコアが一致するかを確認
 function isTarget(thirdScore: number, getCheckBoxValues: number[]): boolean {
   if (getCheckBoxValues.length === 0) {
     return true;
