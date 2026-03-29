@@ -94,10 +94,18 @@ function calcScore(): number[] {
   const selectFirstNumberList = getSelectedItems(selectFirstNumber);
 
   const leftList: number[] = [];
-  for (const first of allNumbers) {
-    if (!selectFirstNumberList.includes(first.toString())) {
-      continue;
-    }
+  const firstList: number[] = [];
+
+  if (selectFirstNumberList.length === 0) {
+    // チェックボックスが選択されていない場合は全ての数字を対象とする
+    firstList.push(...allNumbers);
+  } else {
+    // 選択されている場合は、選択された数字のみを対象とする
+    addFirst(selectFirstNumberList);
+    firstList.push(...selectFirstNumberList.map(Number));
+  }
+
+  for (const first of firstList) {
     for (const second of allNumbers) {
       for (const third of leftNumbers) {
         if (isTarget(third, selectLeftNumberList)) {
@@ -113,18 +121,31 @@ function calcScore(): number[] {
 }
 
 // チェックボックスの状態を取得
-function getSelectedItems(selectLeftNumber: NodeListOf<HTMLInputElement>): string[] {
-  const values: string[] = [];
+function getSelectedItems(selectLeftNumber: NodeListOf<HTMLInputElement>): number[] {
+  const values: number[] = [];
   selectLeftNumber.forEach((node) => {
-    values.push(node.value);
+    values.push(Number(node.value));
   });
   return values;
 }
 
 // 3本目が選択されたスコアかどうかを確認
-function isTarget(thirdScore: number, getCheckBoxValues: string[]): boolean {
+function isTarget(thirdScore: number, getCheckBoxValues: number[]): boolean {
   if (getCheckBoxValues.length === 0) {
     return true;
   }
-  return getCheckBoxValues.includes(thirdScore.toString());
+  return getCheckBoxValues.includes(thirdScore);
+}
+
+// 1本目の指定がチェックされた場合、シングルも追加する
+function addFirst(score: number[]): number[] {
+  score.forEach((num) => {
+    if (num % 3 === 0) {
+      score.push(num / 3);
+    }
+  });
+  if (score.includes(50)) {
+    score.push(25);
+  }
+  return score;
 }
