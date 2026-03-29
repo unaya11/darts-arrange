@@ -20,7 +20,8 @@ const getInputNumber = () => {
 const numbers = Array.from({ length: 20 }, (_, i) => i + 1);
 const bull = [25, 50];
 const leftNumbers = [...numbers.flatMap((num) => [num * 2]), 50];
-// 結果を降順に表示するため、reverseする。reverse()が元の配列を反転させるためslice()でコピーする
+// 結果を降順に表示するため、reverseする
+// reverse()が元の配列を反転させるためslice()でコピーする
 const allNumbers = [
   ...numbers
     .slice()
@@ -100,9 +101,8 @@ function calcScore(): number[] {
     // チェックボックスが選択されていない場合は全ての数字を対象とする
     firstList.push(...allNumbers);
   } else {
-    // 選択されている場合は、選択された数字のみを対象とする
-    addFirst(selectFirstNumberList);
-    firstList.push(...selectFirstNumberList.map(Number));
+    // 選択されている場合はその数字のみを対象とする
+    firstList.push(...createFirstThrowList(selectFirstNumberList));
   }
 
   for (const first of firstList) {
@@ -120,7 +120,7 @@ function calcScore(): number[] {
   return leftList;
 }
 
-// チェックボックスの状態を取得
+// チェックボックスの状態を取得し、選択された数字を配列で返す
 function getSelectedItems(selectLeftNumber: NodeListOf<HTMLInputElement>): number[] {
   const values: number[] = [];
   selectLeftNumber.forEach((node) => {
@@ -129,7 +129,7 @@ function getSelectedItems(selectLeftNumber: NodeListOf<HTMLInputElement>): numbe
   return values;
 }
 
-// 3本目が選択されたスコアかどうかを確認
+// 3本目が選択された上がり目と一致するかを確認
 function isTarget(thirdScore: number, getCheckBoxValues: number[]): boolean {
   if (getCheckBoxValues.length === 0) {
     return true;
@@ -137,15 +137,16 @@ function isTarget(thirdScore: number, getCheckBoxValues: number[]): boolean {
   return getCheckBoxValues.includes(thirdScore);
 }
 
-// 1本目の指定がチェックされた場合、シングルも追加する
-function addFirst(score: number[]): number[] {
+// 1本目の指定がされた場合、外した場合も考慮してシングルもリストに追加する
+function createFirstThrowList(score: number[]): number[] {
+  const firstThrowList = [...score];
   score.forEach((num) => {
     if (num % 3 === 0) {
-      score.push(num / 3);
+      firstThrowList.push(num / 3);
     }
   });
   if (score.includes(50)) {
-    score.push(25);
+    firstThrowList.push(25);
   }
-  return score;
+  return firstThrowList;
 }
