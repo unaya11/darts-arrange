@@ -9,7 +9,82 @@
     <div class="card">
       <h1>ダーツ アレンジ</h1>
       <input type="number" id="numberInput" placeholder="数字を入力してください" />
-      <button id="calcButton">実行</button>
+      <div class="input-group">
+        <div id="errorMessage" class="errorMessage"></div>
+      </div>
+      <div class="settings-container">
+        <div class="settings-container">
+          <fieldset class="setting-group">
+            <legend class="setting-legend">🎯 1本目の指定</legend>
+            <div id="firstTargetGroup" class="check-group">
+              <div>
+                <input type="checkbox" value="60" class="first-checks" id="first-60" checked />
+                <label for="first-60">60(20)</label>
+              </div>
+              <div>
+                <input type="checkbox" value="57" class="first-checks" id="first-57" />
+                <label for="first-57">57(19)</label>
+              </div>
+              <div>
+                <input type="checkbox" value="50" class="first-checks" id="first-50" />
+                <label for="first-50">50(25)</label>
+              </div>
+            </div>
+          </fieldset>
+        </div>
+        <fieldset class="setting-group">
+          <legend class="setting-legend">🎯 上がり目の指定</legend>
+          <div id="arrangeNumber" class="check-group">
+            <div>
+              <input type="checkbox" value="50" class="checks" id="check-50" />
+              <label for="50">50</label>
+            </div>
+            <div>
+              <input type="checkbox" value="40" class="checks" id="check-40" checked />
+              <label for="40">40</label>
+            </div>
+            <div>
+              <input type="checkbox" value="36" class="checks" id="check-36" checked />
+              <label for="36">36</label>
+            </div>
+            <div>
+              <input type="checkbox" value="32" class="checks" id="check-32" checked />
+              <label for="32">32</label>
+            </div>
+            <div>
+              <input type="checkbox" value="28" class="checks" id="check-28" checked />
+              <label for="28">28</label>
+            </div>
+            <div>
+              <input type="checkbox" value="24" class="checks" id="check-24" checked />
+              <label for="24">24</label>
+            </div>
+            <div>
+              <input type="checkbox" value="16" class="checks" id="check-16" checked />
+              <label for="16">16</label>
+            </div>
+
+            <div class="all-select-wrapper">
+              <input type="checkbox" value="全て選択" class="checkAlls" id="check-all" />
+              <label for="check-all" class="all-select-label">全て選択</label>
+            </div>
+          </div>
+        </fieldset>
+      </div>
+      <button id="showDialog">計算</button>
+      <dialog>
+        <div class="dialog-inner">
+          <header class="dialog-header">
+            <h3 id="dialogTitle"></h3>
+          </header>
+
+          <div id="dialogBox" class="dialog-body"></div>
+
+          <footer class="dialog-footer">
+            <button id="closeDialog">とじる</button>
+          </footer>
+        </div>
+      </dialog>
       <ul id="resultList"></ul>
     </div>
     <script type="module" src="/src/main.ts"></script>
