@@ -4,7 +4,7 @@ const showButton = document.querySelector<HTMLDialogElement>('#showDialog');
 const resultElement = document.getElementById('dialogBox');
 const errorDisplay = document.querySelector('#errorMessage');
 const checks = document.querySelectorAll<HTMLInputElement>('.checks');
-const checkall = document.querySelector<HTMLInputElement>('.checkAlls');
+const checkAll = document.querySelector<HTMLInputElement>('.checkAlls');
 
 const getInputNumber = () => {
   const el = document.querySelector<HTMLInputElement>('#numberInput');
@@ -29,8 +29,8 @@ const allNumbers = [
   ...bull,
 ];
 
-checkall?.addEventListener('click', () => {
-  const isChecked = checkall.checked;
+checkAll?.addEventListener('click', () => {
+  const isChecked = checkAll.checked;
   checks.forEach((check) => {
     check.checked = isChecked;
   });
