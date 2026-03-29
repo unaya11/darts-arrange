@@ -94,7 +94,7 @@ function calcScore(): number[] {
   );
   const selectFirstNumberList = getSelectedItems(selectFirstNumber);
 
-  const leftList: number[] = [];
+  const leftList: string[] = [];
   const firstList: number[] = [];
 
   if (selectFirstNumberList.length === 0) {
@@ -111,13 +111,16 @@ function calcScore(): number[] {
         if (isTarget(third, selectLeftNumberList)) {
           const score = first + second + third;
           if (getInputNumber()?.valueAsNumber === score) {
-            leftList.push(first, second, third);
+            leftList.push(`${first},${second},${third}`);
           }
         }
       }
     }
   }
-  return leftList;
+  const newa = new Set(leftList);
+  const finalResult = [...newa].flatMap((item) => item.split(',').map(Number));
+  console.log(finalResult.length);
+  return finalResult;
 }
 
 // チェックボックスの状態を取得し、選択された数字を配列で返す
