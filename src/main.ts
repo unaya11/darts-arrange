@@ -117,9 +117,8 @@ function calcScore(): number[] {
       }
     }
   }
-  const newa = new Set(leftList);
-  const finalResult = [...newa].flatMap((item) => item.split(',').map(Number));
-  console.log(finalResult.length);
+  const uniqueLeftList = new Set(leftList);
+  const finalResult = [...uniqueLeftList].flatMap((item) => item.split(',').map(Number));
   return finalResult;
 }
 
