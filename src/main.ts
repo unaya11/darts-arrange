@@ -88,6 +88,7 @@ function calcScore(): number[] {
     'input[type=checkbox]:checked.checks',
   );
   const selectLeftNumberList = getSelectedItems(selectLeftNumber);
+  const LeftNumberList = selectLeftNumberList.length > 0 ? selectLeftNumberList : leftNumbers;
 
   const selectFirstNumber = document.querySelectorAll<HTMLInputElement>(
     'input[type=checkbox]:checked.first-checks',
@@ -105,14 +106,13 @@ function calcScore(): number[] {
     firstList.push(...createFirstThrowList(selectFirstNumberList));
   }
 
+  const targetScore = getInputNumber()?.valueAsNumber;
   for (const first of firstList) {
     for (const second of allNumbers) {
-      for (const third of leftNumbers) {
-        if (isTarget(third, selectLeftNumberList)) {
-          const score = first + second + third;
-          if (getInputNumber()?.valueAsNumber === score) {
-            leftList.push(`${first},${second},${third}`);
-          }
+      if (targetScore != undefined) {
+        const requiredThird = targetScore - (first + second);
+        if (LeftNumberList.includes(requiredThird)) {
+          leftList.push(`${first},${second},${requiredThird}`);
         }
       }
     }
