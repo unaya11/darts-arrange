@@ -2,45 +2,35 @@ import * as ScoreItems from '../ui/view';
 import * as darts from '../constants/darts';
 
 export function calcScore(): number[] {
-  const selectLeftNumber = document.querySelectorAll<HTMLInputElement>(
-    'input[type=checkbox]:checked.checks',
-  );
-  const selectLeftNumberList = getSelectedItems(selectLeftNumber);
-  const LeftNumberList = selectLeftNumberList.length > 0 ? selectLeftNumberList : darts.leftNumbers;
+  // 一投目が指定されている場合はその値とそのシングルを対象とし、指定されていない場合はすべてを対象とする
+  const selecteFirstNumbers = getSelectNumbers('input[type=checkbox]:checked.first-checks');
+  const firstNumberList = selecteFirstNumbers
+    ? addSingleNumberThrowList(selecteFirstNumbers)
+    : darts.allNumbers;
 
-  const selectFirstNumber = document.querySelectorAll<HTMLInputElement>(
-    'input[type=checkbox]:checked.first-checks',
-  );
-  const selectFirstNumberList = getSelectedItems(selectFirstNumber);
+  // 三投目が指定されている場合はその値を、指定されていない場合はすべてのダブルを対象とする
+  const leftNumberList =
+    getSelectNumbers('input[type=checkbox]:checked.checks') ?? darts.leftNumbers;
 
-  const leftList: string[] = [];
-  const firstList: number[] = [];
-
-  if (selectFirstNumberList.length === 0) {
-    // チェックボックスが選択されていない場合は全ての数字を対象とする
-    firstList.push(...darts.allNumbers);
-  } else {
-    // 選択されている場合はその数字のみを対象とする
-    firstList.push(...createFirstThrowList(selectFirstNumberList));
-  }
+  const resultList: string[] = [];
 
   const targetScore = ScoreItems.getInputNumber()?.valueAsNumber;
-  for (const first of firstList) {
+  for (const first of firstNumberList) {
     for (const second of darts.allNumbers) {
       if (targetScore != undefined) {
         const requiredThird = targetScore - (first + second);
-        if (LeftNumberList.includes(requiredThird)) {
-          leftList.push(`${first},${second},${requiredThird}`);
+        if (leftNumberList.includes(requiredThird)) {
+          resultList.push(`${first},${second},${requiredThird}`);
         }
       }
     }
   }
-  const uniqueLeftList = new Set(leftList);
+  const uniqueLeftList = new Set(resultList);
   const finalResult = [...uniqueLeftList].flatMap((item) => item.split(',').map(Number));
   return finalResult;
 }
 
-// 選択された上がり目と3本目のスコアが一致するかを確認
+// 選択された上がり目と三投目のスコアが一致するかを確認
 function isTarget(thirdScore: number, getCheckBoxValues: number[]): boolean {
   if (getCheckBoxValues.length === 0) {
     return true;
@@ -48,8 +38,8 @@ function isTarget(thirdScore: number, getCheckBoxValues: number[]): boolean {
   return getCheckBoxValues.includes(thirdScore);
 }
 
-// 1本目の指定がされた場合、外した場合も考慮してシングルもリストに追加する
-function createFirstThrowList(score: number[]): number[] {
+// 一投目の指定がされた場合、外した場合も考慮してシングルもリストに追加する
+function addSingleNumberThrowList(score: number[]): number[] {
   const firstThrowList = [...score];
   score.forEach((num) => {
     if (num % 3 === 0) {
@@ -61,10 +51,16 @@ function createFirstThrowList(score: number[]): number[] {
   }
   return firstThrowList;
 }
+
 // チェックボックスの状態を取得し、選択された数字を配列で返す
-function getSelectedItems(selectLeftNumber: NodeListOf<HTMLInputElement>): number[] {
+// 未指定の場合はnullを返す
+function getSelectNumbers(selector: string): number[] | null {
+  const getSelectNumbers = document.querySelectorAll<HTMLInputElement>(selector);
+  if (getSelectNumbers.length === 0) {
+    return null;
+  }
   const values: number[] = [];
-  selectLeftNumber.forEach((node) => {
+  getSelectNumbers.forEach((node) => {
     values.push(Number(node.value));
   });
   return values;
