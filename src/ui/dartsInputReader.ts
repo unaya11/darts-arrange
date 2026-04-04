@@ -1,0 +1,21 @@
+// チェックボックスの状態を取得し、選択された数字を配列で返す
+// 未指定の場合はnullを返す
+export function getSelectNumbers(selector: string): number[] | null {
+  const getSelectNumbers = document.querySelectorAll<HTMLInputElement>(selector);
+  if (getSelectNumbers.length === 0) {
+    return null;
+  }
+  const values: number[] = [];
+  getSelectNumbers.forEach((node) => {
+    values.push(Number(node.value));
+  });
+  return values;
+}
+
+export function getInputNumber(): number | undefined {
+  const el = document.querySelector<HTMLInputElement>('#numberInput')?.valueAsNumber;
+  if (el === undefined || Number.isNaN(el)) {
+    return undefined;
+  }
+  return el;
+}
