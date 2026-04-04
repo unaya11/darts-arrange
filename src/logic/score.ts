@@ -1,4 +1,5 @@
 import * as darts from '../constants/darts';
+import { NoLeftNuberError } from '../constants/error';
 
 export function calcScore(
   inputnumber: number,
@@ -10,14 +11,16 @@ export function calcScore(
   const targetScore = inputnumber;
   for (const first of firstThrowList) {
     for (const second of darts.allNumbers) {
-      if (targetScore != undefined) {
-        const requiredThird = targetScore - (first + second);
-        if (thirdThrowList.includes(requiredThird)) {
-          resultList.push(`${first},${second},${requiredThird}`);
-        }
+      const requiredThird = targetScore - (first + second);
+      if (thirdThrowList.includes(requiredThird)) {
+        resultList.push(`${first},${second},${requiredThird}`);
       }
     }
   }
+  if (resultList.length === 0) {
+    throw new NoLeftNuberError();
+  }
+
   const uniqueLeftList = new Set(resultList);
   const finalResult = [...uniqueLeftList].flatMap((item) => item.split(',').map(Number));
   return finalResult;

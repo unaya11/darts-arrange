@@ -1,31 +1,19 @@
+import { NoLeftNuberError } from '../constants/error';
+import { NoInputNumberError } from '../constants/error';
+
 export const dialog = document.querySelector<HTMLDialogElement>('dialog');
 export const showButton = document.querySelector<HTMLDialogElement>('#showDialog');
 export const closeButton = document.querySelector<HTMLDialogElement>('#closeDialog');
 export const resultElement = document.getElementById('dialogBox');
-export const errorDisplay = document.querySelector('#errorMessage');
+export const errorDisplay = document.querySelector('#errorMessage')!;
 export const checks = document.querySelectorAll<HTMLInputElement>('.checks');
 export const checkAll = document.querySelector<HTMLInputElement>('.checkAlls');
 
-export function openDialog(leftNumber: number, score: number[]) {
-  if (dialog) {
-    if (errorDisplay) {
-      errorDisplay.textContent = '';
-    }
-    if (leftNumber === undefined) {
-      return;
-    }
-
-    if (score.length === 0) {
-      {
-        if (errorDisplay) {
-          errorDisplay.textContent = '選択した条件での上がり目が存在しません';
-          return;
-        }
-      }
-    }
-    createView(score, leftNumber);
-    dialog?.showModal();
-  }
+export function openDialog(targetScore: number, score: number[]) {
+  // メッセージ表示を初期化する
+  errorDisplay.textContent = '';
+  createView(score, targetScore);
+  dialog?.showModal();
 }
 
 export function closeDialog() {
@@ -57,8 +45,8 @@ export function createView(calcScoreList: number[], inputNumber: number) {
   }
 }
 
-export function nullView() {
-  if (errorDisplay) {
-    errorDisplay.textContent = '数字を入力してください';
+export function createErrorMessage(error: unknown) {
+  if (error instanceof Error) {
+    errorDisplay.textContent = error.message;
   }
 }

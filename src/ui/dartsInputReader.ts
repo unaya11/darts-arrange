@@ -1,3 +1,4 @@
+import { NoInputNumberError } from '../constants/error';
 // チェックボックスの状態を取得し、選択された数字を配列で返す
 // 未指定の場合はnullを返す
 export function getSelectNumbers(selector: string): number[] | undefined {
@@ -12,10 +13,10 @@ export function getSelectNumbers(selector: string): number[] | undefined {
   return values;
 }
 
-export function getInputNumber(): number | undefined {
+export function getInputNumber(): number {
   const el = document.querySelector<HTMLInputElement>('#numberInput')?.valueAsNumber;
   if (el === undefined || Number.isNaN(el)) {
-    return undefined;
+    throw new NoInputNumberError();
   }
   return el;
 }
