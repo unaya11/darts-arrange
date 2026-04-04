@@ -1,6 +1,3 @@
-import { NoLeftNuberError } from '../constants/error';
-import { NoInputNumberError } from '../constants/error';
-
 export const dialog = document.querySelector<HTMLDialogElement>('dialog');
 export const showButton = document.querySelector<HTMLDialogElement>('#showDialog');
 export const closeButton = document.querySelector<HTMLDialogElement>('#closeDialog');
