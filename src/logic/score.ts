@@ -1,11 +1,11 @@
 import * as ScoreItems from '../ui/view';
 import * as darts from '../constants/darts';
 
-export function calcScore(): number[] {
+export function calcScore(inputnumber: number): number[] {
   // 一投目が指定されている場合はその値とそのシングルを対象とし、指定されていない場合はすべてを対象とする
-  const selecteFirstNumbers = getSelectNumbers('input[type=checkbox]:checked.first-checks');
-  const firstNumberList = selecteFirstNumbers
-    ? addSingleNumberThrowList(selecteFirstNumbers)
+  const selectFirstNumbers = getSelectNumbers('input[type=checkbox]:checked.first-checks');
+  const firstNumberList = selectFirstNumbers
+    ? addSingleNumberThrowList(selectFirstNumbers)
     : darts.allNumbers;
 
   // 三投目が指定されている場合はその値を、指定されていない場合はすべてのダブルを対象とする
@@ -14,7 +14,7 @@ export function calcScore(): number[] {
 
   const resultList: string[] = [];
 
-  const targetScore = ScoreItems.getInputNumber()?.valueAsNumber;
+  const targetScore = getInputNumber();
   for (const first of firstNumberList) {
     for (const second of darts.allNumbers) {
       if (targetScore != undefined) {
@@ -64,4 +64,12 @@ function getSelectNumbers(selector: string): number[] | null {
     values.push(Number(node.value));
   });
   return values;
+}
+
+export function getInputNumber(): number | undefined {
+  const el = document.querySelector<HTMLInputElement>('#numberInput')?.valueAsNumber;
+  if (el === undefined || Number.isNaN(el)) {
+    return undefined;
+  }
+  return el;
 }
