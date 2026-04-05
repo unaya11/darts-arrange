@@ -6,7 +6,7 @@ export const errorDisplay = document.querySelector('#errorMessage')!;
 export const checks = document.querySelectorAll<HTMLInputElement>('.checks');
 export const checkAll = document.querySelector<HTMLInputElement>('.checkAlls');
 
-export function openDialog(targetScore: number, score: number[]) {
+export function openDialog(targetScore: number, score: string[]) {
   // メッセージ表示を初期化する
   errorDisplay.textContent = '';
   createView(score, targetScore);
@@ -26,7 +26,7 @@ export function toggleAllChecks() {
   });
 }
 
-export function createView(calcScoreList: number[], inputNumber: number) {
+export function createView(calcScoreList: string[], inputNumber: number) {
   if (!resultElement) return;
   const title = document.getElementById('dialogTitle');
   if (title) {
@@ -34,12 +34,11 @@ export function createView(calcScoreList: number[], inputNumber: number) {
   }
   resultElement.innerHTML = '';
 
-  for (let i = 0; i < calcScoreList.length; i += 3) {
-    const chunk = calcScoreList.slice(i, i + 3);
+  calcScoreList.forEach((scoreText) => {
     const p = document.createElement('p');
-    p.textContent = chunk.join(' - ');
+    p.textContent = scoreText;
     resultElement.appendChild(p);
-  }
+  });
 }
 
 export function createErrorMessage(error: unknown) {

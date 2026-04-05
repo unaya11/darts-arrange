@@ -20,7 +20,7 @@ view.showButton?.addEventListener('click', () => {
   const selectThirdNumbers = getSelectNumbers('input[type=checkbox]:checked.checks');
   const thirdThrowList = selectThirdNumbers ?? darts.leftNumbers;
   let targetScore: number;
-  let calcScoreList: number[];
+  let calcScoreList: string[];
 
   try {
     targetScore = getInputNumber();

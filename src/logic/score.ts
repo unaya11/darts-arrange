@@ -5,7 +5,7 @@ export function calcScore(
   inputnumber: number,
   firstThrowList: number[],
   thirdThrowList: number[],
-): number[] {
+): string[] {
   const resultList: string[] = [];
 
   const targetScore = inputnumber;
@@ -13,17 +13,16 @@ export function calcScore(
     for (const second of darts.allNumbers) {
       const requiredThird = targetScore - (first + second);
       if (thirdThrowList.includes(requiredThird)) {
-        resultList.push(`${first},${second},${requiredThird}`);
+        resultList.push(`${first}-${second}-${requiredThird}`);
       }
     }
   }
   if (resultList.length === 0) {
     throw new NoLeftNuberError();
   }
-
-  const uniqueLeftList = new Set(resultList);
-  const finalResult = [...uniqueLeftList].flatMap((item) => item.split(',').map(Number));
-  return finalResult;
+  // 重複を排除するためSetに収めた後、配列に戻す
+  const set = new Set(resultList);
+  return Array.from(set);
 }
 
 // 選択された上がり目と三投目のスコアが一致するかを確認
