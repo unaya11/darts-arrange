@@ -1,0 +1,48 @@
+import * as darts from '../constants/darts';
+import { NoLeftNuberError } from '../constants/error';
+
+export function calcScore(
+  inputnumber: number,
+  firstThrowList: number[],
+  thirdThrowList: number[],
+): string[] {
+  const resultList: string[] = [];
+
+  const targetScore = inputnumber;
+  for (const first of firstThrowList) {
+    for (const second of darts.allNumbers) {
+      const requiredThird = targetScore - (first + second);
+      if (thirdThrowList.includes(requiredThird)) {
+        resultList.push(`${first}-${second}-${requiredThird}`);
+      }
+    }
+  }
+  if (resultList.length === 0) {
+    throw new NoLeftNuberError();
+  }
+  // 重複を排除するためSetに収めた後、配列に戻す
+  const set = new Set(resultList);
+  return Array.from(set);
+}
+
+// 選択された上がり目と三投目のスコアが一致するかを確認
+function isTarget(thirdScore: number, getCheckBoxValues: number[]): boolean {
+  if (getCheckBoxValues.length === 0) {
+    return true;
+  }
+  return getCheckBoxValues.includes(thirdScore);
+}
+
+// 一投目の指定がされた場合、外した場合も考慮してシングルもリストに追加する
+export function addSingleNumberThrowList(score: number[]): number[] {
+  const firstThrowList = [...score];
+  score.forEach((num) => {
+    if (num % 3 === 0) {
+      firstThrowList.push(num / 3);
+    }
+  });
+  if (score.includes(50)) {
+    firstThrowList.push(25);
+  }
+  return firstThrowList;
+}

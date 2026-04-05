@@ -1,151 +1,37 @@
 import './styles/main.css';
-const dialog = document.querySelector<HTMLDialogElement>('dialog');
-const showButton = document.querySelector<HTMLDialogElement>('#showDialog');
-const resultElement = document.getElementById('dialogBox');
-const errorDisplay = document.querySelector('#errorMessage');
-const checks = document.querySelectorAll<HTMLInputElement>('.checks');
-const checkAll = document.querySelector<HTMLInputElement>('.checkAlls');
+import * as view from './ui/view';
+import * as darts from './constants/darts';
+import { addSingleNumberThrowList, calcScore } from './logic/score';
+import { getInputNumber, getSelectNumbers } from './ui/dartsInputReader';
+import { createErrorMessage } from './ui/view';
 
-const getInputNumber = () => {
-  const el = document.querySelector<HTMLInputElement>('#numberInput');
-  if (!el || el.value === '') {
-    if (errorDisplay) {
-      errorDisplay.textContent = '数字を入力してください';
-    }
+view.checkAll?.addEventListener('click', () => {
+  view.toggleAllChecks();
+});
+
+view.showButton?.addEventListener('click', () => {
+  // 一投目が指定されている場合はその値とそのシングルを対象とし、指定されていない場合はすべてを対象とする
+  const selectFirstNumbers = getSelectNumbers('input[type=checkbox]:checked.first-checks');
+  const firstThrowList = selectFirstNumbers
+    ? addSingleNumberThrowList(selectFirstNumbers)
+    : darts.allNumbers;
+
+  // 三投目が指定されている場合はその値を、指定されていない場合はすべてのダブルを対象とする
+  const selectThirdNumbers = getSelectNumbers('input[type=checkbox]:checked.checks');
+  const thirdThrowList = selectThirdNumbers ?? darts.leftNumbers;
+  let targetScore: number;
+  let calcScoreList: string[];
+
+  try {
+    targetScore = getInputNumber();
+    calcScoreList = calcScore(targetScore, firstThrowList, thirdThrowList);
+  } catch (e) {
+    createErrorMessage(e);
     return;
   }
-  return el;
-};
-
-const numbers = Array.from({ length: 20 }, (_, i) => i + 1);
-const bull = [25, 50];
-const leftNumbers = [...numbers.flatMap((num) => [num * 2]), 50];
-// 結果を降順に表示するため、reverseする。reverse()が元の配列を反転させるためslice()でコピーする
-const allNumbers = [
-  ...numbers
-    .slice()
-    .reverse()
-    .flatMap((num) => [num * 3, num * 2, num]),
-  ...bull,
-];
-
-checkAll?.addEventListener('click', () => {
-  const isChecked = checkAll.checked;
-  checks.forEach((check) => {
-    check.checked = isChecked;
-  });
+  view.openDialog(targetScore, calcScoreList);
 });
 
-showButton?.addEventListener('click', () => {
-  const calcScoreList = calcScore();
-  if (dialog) {
-    if (errorDisplay) {
-      errorDisplay.textContent = '';
-    }
-    if (getInputNumber() === undefined) {
-      return;
-    }
-
-    if (calcScoreList.length === 0) {
-      {
-        if (errorDisplay) {
-          errorDisplay.textContent = '選択した3本目での上がり目が存在しません';
-          return;
-        }
-      }
-    }
-    createView(calcScoreList);
-    dialog.showModal();
-  }
+view.closeButton?.addEventListener('click', () => {
+  view.closeDialog();
 });
-
-const closeButton = document.querySelector<HTMLDialogElement>('#closeDialog');
-closeButton?.addEventListener('click', () => {
-  if (dialog) {
-    dialog.close();
-  }
-});
-
-function createView(calcScoreList: number[]) {
-  if (!resultElement) return;
-  const title = document.getElementById('dialogTitle');
-  if (title) {
-    title.textContent = getInputNumber()?.value + ' のアレンジ';
-  }
-  resultElement.innerHTML = '';
-
-  for (let i = 0; i < calcScoreList.length; i += 3) {
-    const chunk = calcScoreList.slice(i, i + 3);
-    const p = document.createElement('p');
-    p.textContent = chunk.join(' - ');
-    resultElement.appendChild(p);
-  }
-}
-
-function calcScore(): number[] {
-  const selectLeftNumber = document.querySelectorAll<HTMLInputElement>(
-    'input[type=checkbox]:checked.checks',
-  );
-  const selectLeftNumberList = getSelectedItems(selectLeftNumber);
-
-  const selectFirstNumber = document.querySelectorAll<HTMLInputElement>(
-    'input[type=checkbox]:checked.first-checks',
-  );
-  const selectFirstNumberList = getSelectedItems(selectFirstNumber);
-
-  const leftList: number[] = [];
-  const firstList: number[] = [];
-
-  if (selectFirstNumberList.length === 0) {
-    // チェックボックスが選択されていない場合は全ての数字を対象とする
-    firstList.push(...allNumbers);
-  } else {
-    // 選択されている場合は、選択された数字のみを対象とする
-    addFirst(selectFirstNumberList);
-    firstList.push(...selectFirstNumberList.map(Number));
-  }
-
-  for (const first of firstList) {
-    for (const second of allNumbers) {
-      for (const third of leftNumbers) {
-        if (isTarget(third, selectLeftNumberList)) {
-          const score = first + second + third;
-          if (getInputNumber()?.valueAsNumber === score) {
-            leftList.push(first, second, third);
-          }
-        }
-      }
-    }
-  }
-  return leftList;
-}
-
-// チェックボックスの状態を取得
-function getSelectedItems(selectLeftNumber: NodeListOf<HTMLInputElement>): number[] {
-  const values: number[] = [];
-  selectLeftNumber.forEach((node) => {
-    values.push(Number(node.value));
-  });
-  return values;
-}
-
-// 3本目が選択されたスコアかどうかを確認
-function isTarget(thirdScore: number, getCheckBoxValues: number[]): boolean {
-  if (getCheckBoxValues.length === 0) {
-    return true;
-  }
-  return getCheckBoxValues.includes(thirdScore);
-}
-
-// 1本目の指定がチェックされた場合、シングルも追加する
-function addFirst(score: number[]): number[] {
-  score.forEach((num) => {
-    if (num % 3 === 0) {
-      score.push(num / 3);
-    }
-  });
-  if (score.includes(50)) {
-    score.push(25);
-  }
-  return score;
-}
