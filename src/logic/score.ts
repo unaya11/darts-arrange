@@ -12,16 +12,15 @@ export function calcScore(
   for (const firstThrow of firstThrowList) {
     // 2本で削るスコアを計算する
     thirdThrowList.forEach((thirdThrow) => {
-      // jjj
+      // 入力値から1、3本目を引いて2本目で削るスコアを出す
       const secondThrow = targetScore - firstThrow - thirdThrow;
 
-      // 全ての数字の中に存在すれば結果に追加する
+      // 存在すれば結果に追加する
       if (allNumbers.includes(secondThrow)) {
         resultList.push(`${firstThrow}-${secondThrow}-${thirdThrow}`);
       }
     });
   }
-
   if (resultList.length === 0) {
     throw new NoLeftNuberError();
   }
