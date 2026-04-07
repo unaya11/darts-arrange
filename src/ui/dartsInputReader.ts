@@ -1,6 +1,6 @@
 import { NoInputNumberError } from '../constants/error';
 // チェックボックスの状態を取得し、選択された数字を配列で返す
-// 未指定の場合はnullを返す
+// 未指定の場合はundefinedを返す
 export function getSelectNumbers(selector: string): number[] | undefined {
   const getSelectNumbers = document.querySelectorAll<HTMLInputElement>(selector);
   if (getSelectNumbers.length === 0) {
