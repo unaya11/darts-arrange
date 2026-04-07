@@ -1,21 +1,25 @@
-import * as darts from '../constants/darts';
+import { allNumbers } from '../constants/darts';
 import { NoLeftNuberError } from '../constants/error';
 
 export function calcScore(
-  inputnumber: number,
+  targetScore: number,
   firstThrowList: number[],
   thirdThrowList: number[],
 ): string[] {
   const resultList: string[] = [];
 
-  const targetScore = inputnumber;
-  for (const first of firstThrowList) {
-    for (const second of darts.allNumbers) {
-      const requiredThird = targetScore - (first + second);
-      if (thirdThrowList.includes(requiredThird)) {
-        resultList.push(`${first}-${second}-${requiredThird}`);
+  // 1投目と3投目は決まっているので2本目に必要なスコアを出す
+  for (const firstThrow of firstThrowList) {
+    // 2本で削るスコアを計算する
+    thirdThrowList.forEach((thirdThrow) => {
+      // 入力値から1、3本目を引いて2本目で削るスコアを出す
+      const secondThrow = targetScore - firstThrow - thirdThrow;
+
+      // 存在すれば結果に追加する
+      if (allNumbers.includes(secondThrow)) {
+        resultList.push(`${firstThrow}-${secondThrow}-${thirdThrow}`);
       }
-    }
+    });
   }
   if (resultList.length === 0) {
     throw new NoLeftNuberError();
