@@ -29,14 +29,6 @@ export function calcScore(
   return Array.from(set);
 }
 
-// 選択された上がり目と三投目のスコアが一致するかを確認
-function isTarget(thirdScore: number, getCheckBoxValues: number[]): boolean {
-  if (getCheckBoxValues.length === 0) {
-    return true;
-  }
-  return getCheckBoxValues.includes(thirdScore);
-}
-
 // 一投目の指定がされた場合、外した場合も考慮してシングルもリストに追加する
 export function addSingleNumberThrowList(score: number[]): number[] {
   const firstThrowList = [...score];
