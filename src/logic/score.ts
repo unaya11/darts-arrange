@@ -1,5 +1,5 @@
-import { allNumbers } from '../constants/darts';
-import { NoLeftNuberError } from '../constants/error';
+import { allNumbers } from '@/constants/darts';
+import { NoResultError } from '@/constants/error';
 
 export function calcScore(
   targetScore: number,
@@ -22,7 +22,7 @@ export function calcScore(
     });
   }
   if (resultList.length === 0) {
-    throw new NoLeftNuberError();
+    throw new NoResultError();
   }
   // 重複を排除するためSetに収めた後、配列に戻す
   const set = new Set(resultList);

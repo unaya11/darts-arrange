@@ -1,4 +1,5 @@
 import { defineConfig } from 'vite';
+import path from 'path';
 
 export default defineConfig(() => {
   const prNumber = process.env.PR_NUMBER;
@@ -7,13 +8,21 @@ export default defineConfig(() => {
 
   return {
     base: base,
+    resolve: {
+      alias: {
+        '@': path.resolve(__dirname, './src'),
+      },
+    },
+    build: {
+      sourcemap: false,
+    },
     test: {
       environment: 'happy-dom',
       setupFiles: ['./vitest-setup.ts'],
       globals: true,
       coverage: {
-        provider: 'v8' as 'v8',
-        reporter: ['text', 'html'] as any[],
+        provider: 'v8' as const,
+        reporter: ['text', 'html'],
       },
     },
   };

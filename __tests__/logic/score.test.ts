@@ -1,18 +1,17 @@
-import { describe, it, expect } from 'vitest';
-import { calcScore, addSingleNumberThrowList } from '../../logic/score';
-import { NoLeftNuberError } from '../../constants/error';
-import { allNumbers } from '../../constants/darts';
+import { allNumbers } from '@/constants/darts';
+import { NoResultError } from '@/constants/error';
+import { addSingleNumberThrowList, calcScore } from '@/logic/score';
 
 describe('calcScoreのテスト', () => {
   it('resultListが空ではない場合、例外が投げられないこと', () => {
     expect(() => {
       calcScore(170, [60], [50]);
-    }).not.toThrow(NoLeftNuberError);
+    }).not.toThrow(NoResultError);
   });
   it('resultListが空の場合、例外が投げられること', () => {
     expect(() => {
       calcScore(999, [10], [10]);
-    }).toThrow(NoLeftNuberError);
+    }).toThrow(NoResultError);
   });
   it('1投目と2投目が入れ替わる（3投目は同じ）パターンの場合、どちらもresultListに追加されること', () => {
     const resultList = calcScore(167, [60, 57], [50]);

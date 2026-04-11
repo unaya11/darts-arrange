@@ -1,5 +1,4 @@
-import { describe, it, expect } from 'vitest';
-import { leftNumbers } from '../../constants/darts';
+import { leftNumbers } from '@/constants/darts';
 
 describe('Darts Constants のバリデーション', () => {
   it('leftNumbers（上がり目）はすべて偶数であること', () => {

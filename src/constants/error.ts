@@ -5,7 +5,7 @@ export class NoInputNumberError extends ErrorFactory({
   message: '数字を入力してください',
 }) {}
 
-export class NoLeftNuberError extends ErrorFactory({
+export class NoResultError extends ErrorFactory({
   name: 'NoLeftNuberError',
   message: '選択した条件での上がり目が存在しません',
 }) {}
