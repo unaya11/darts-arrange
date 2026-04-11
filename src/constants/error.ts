@@ -6,6 +6,6 @@ export class NoInputNumberError extends ErrorFactory({
 }) {}
 
 export class NoResultError extends ErrorFactory({
-  name: 'NoLeftNuberError',
+  name: 'NoResultError',
   message: '選択した条件での上がり目が存在しません',
 }) {}

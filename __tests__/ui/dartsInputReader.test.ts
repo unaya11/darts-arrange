@@ -1,9 +1,11 @@
-import { getSelectNumbers } from '@/ui/dartsInputReader';
+import { NoInputNumberError } from '@/constants/error';
+import { getInputNumber, getSelectNumbers } from '@/ui/dartsInputReader';
+
+beforeEach(() => {
+  document.body.innerHTML = '';
+});
 
 describe('getSelectNumbers', () => {
-  beforeEach(() => {
-    document.body.innerHTML = '';
-  });
   it('チェックが入っている場合、値を取得できること', () => {
     document.body.innerHTML = `
       <input type="checkbox" value="60" class="first-checks" id="first-60" checked />
@@ -33,4 +35,30 @@ describe('getSelectNumbers', () => {
     expect(actual).not.toContain(40);
   });
 });
-describe('getInputNumber');
+describe('getInputNumber', () => {
+  it('入力値が取得できること', () => {
+    const inputNumber = 40;
+    document.body.innerHTML = `<input type="number" id="inputNumber" value="${inputNumber}"/>
+    `;
+    const actual = getInputNumber();
+    expect(inputNumber).toBe(actual);
+  });
+  it('入力値が無い場合、エラーとなること', () => {
+    document.body.innerHTML = '<input type="number" id="inputNumber" value="" />';
+    expect(() => {
+      getInputNumber();
+    }).toThrow(NoInputNumberError);
+  });
+  it('入力値が全角数字の場合、エラーとなること', () => {
+    document.body.innerHTML = '<input type="number" id="inputNumber" value="４０" />';
+    expect(() => {
+      getInputNumber();
+    }).toThrow(NoInputNumberError);
+  });
+  it('入力値が数字以外の場合、エラーとなること', () => {
+    document.body.innerHTML = '<input type="number" id="inputNumber" value="[]" />';
+    expect(() => {
+      getInputNumber();
+    }).toThrow(NoInputNumberError);
+  });
+});

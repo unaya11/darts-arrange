@@ -15,7 +15,7 @@ export function getSelectNumbers(selector: string): number[] | undefined {
 }
 
 export function getInputNumber(): number {
-  const el = document.querySelector<HTMLInputElement>('#numberInput')?.valueAsNumber;
+  const el = document.querySelector<HTMLInputElement>('#inputNumber')?.valueAsNumber;
   if (el === undefined || Number.isNaN(el)) {
     throw new NoInputNumberError();
   }
