@@ -23,6 +23,13 @@ export default defineConfig(() => {
         provider: 'v8' as const,
         reporter: ['text', 'html'],
       },
+      exclude: [
+        '**/node_modules/**',
+        '**/dist/**',
+        '**/e2e/**',
+        '**/coverage/**',
+        '**/.{idea,git,cache,output,temp}/**',
+      ],
     },
   };
 });

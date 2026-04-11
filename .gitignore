@@ -1,7 +1,7 @@
 
 node_modules/
 /dist/
-
+coverage/
 
 .idea/
 .vscode/
@@ -25,3 +25,10 @@ Thumbs.db
 .env.development.local
 .env.test.local
 .env.production.local
+
+# Playwright
+/test-results/
+/playwright-report/
+/blob-report/
+/playwright/.cache/
+/playwright/.auth/
