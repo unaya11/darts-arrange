@@ -2,7 +2,7 @@ import { ErrorFactory } from '@praha/error-factory';
 
 export class NoInputNumberError extends ErrorFactory({
   name: 'NoInputNumberError',
-  message: '数字を入力してください',
+  message: '半角数字を入力してください',
 }) {}
 
 export class NoResultError extends ErrorFactory({
