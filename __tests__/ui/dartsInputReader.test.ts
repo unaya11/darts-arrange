@@ -1,3 +1,6 @@
+/**
+ * @vitest-environment happy-dom
+ */
 import { NoInputNumberError } from '@/constants/error';
 import { getInputNumber, getSelectNumbers } from '@/ui/dartsInputReader';
 

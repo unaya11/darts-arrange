@@ -17,8 +17,7 @@ export default defineConfig(() => {
       sourcemap: false,
     },
     test: {
-      environment: 'happy-dom',
-      setupFiles: ['./vitest-setup.ts'],
+      environment: 'node',
       globals: true,
       coverage: {
         provider: 'v8' as const,
