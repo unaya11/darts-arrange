@@ -3,7 +3,8 @@ export const showButton = document.querySelector<HTMLDialogElement>('#showDialog
 export const closeButton = document.querySelector<HTMLDialogElement>('#closeDialog');
 export const resultElement = document.getElementById('dialogBox');
 export const errorDisplay = document.querySelector('#errorMessage')!;
-export const checks = document.querySelectorAll<HTMLInputElement>('.third-checks');
+export const thirdChecks = document.querySelectorAll<HTMLInputElement>('.third-checks');
+export const firstChecks = document.querySelectorAll<HTMLInputElement>('.first-checks');
 export const checkAllsThird = document.querySelector<HTMLInputElement>('.checkAllsThird');
 export const checkAllsFirst = document.querySelector<HTMLInputElement>('.checkAllsFirst');
 export function openDialog(targetScore: number, score: string[]) {

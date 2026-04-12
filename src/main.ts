@@ -8,20 +8,20 @@ import {
   closeButton,
   closeDialog,
   createErrorMessage,
+  firstChecks,
   openDialog,
   showButton,
+  thirdChecks,
   toggleAllChecks,
 } from './ui/view';
 
 // 1本目の全選択
 checkAllsFirst?.addEventListener('click', () => {
-  const firstChecks = document.querySelectorAll<HTMLInputElement>('.first-checks');
   toggleAllChecks(checkAllsFirst!, firstChecks);
 });
 
 // 上がり目の全選択
 checkAllsThird?.addEventListener('click', () => {
-  const thirdChecks = document.querySelectorAll<HTMLInputElement>('.third-checks');
   toggleAllChecks(checkAllsThird!, thirdChecks);
 });
 
