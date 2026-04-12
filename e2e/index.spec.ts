@@ -78,18 +78,37 @@ test('エラー表示が出た後に正常に動作した場合、エラー表�
 
   await expect(page.locator('#errorMessage')).toContainText('');
 });
-test('チェックボックスの動作確認', async ({ page }) => {
-  const checkAll = page.locator('#check-all');
-  await page.getByText('全て選択').click();
+test('1本目の指定欄のチェックボックスの動作確認', async ({ page }) => {
+  const firstGroup = page.locator('#firstTargetGroup');
+  const allCheckboxes = firstGroup.locator('.first-checks');
+  const selectAll = firstGroup.getByRole('checkbox', { name: '全て選択' });
+  await selectAll.click();
 
-  await expect(checkAll).toBeChecked();
-  await expect(page.locator('#check-50')).toBeChecked();
+  const checks = await allCheckboxes.all();
+  for (const check of checks) {
+    await expect(check).toBeChecked();
+  }
 
-  await page.getByText('全て選択').click();
-  await expect(checkAll).not.toBeChecked();
+  await selectAll.click();
 
-  await page.getByText('全て選択').click();
-  await page.locator('#check-50').click();
-  await page.getByText('全て選択').click();
-  await expect(checkAll).not.toBeChecked();
+  for (const check of checks) {
+    await expect(check).not.toBeChecked();
+  }
+});
+test('3本目の指定欄のチェックボックスの動作確認', async ({ page }) => {
+  const firstGroup = page.locator('#thirdTargetGroup');
+  const allCheckboxes = firstGroup.locator('.third-checks');
+  const selectAll = firstGroup.getByRole('checkbox', { name: '全て選択' });
+  await selectAll.click();
+
+  const checks = await allCheckboxes.all();
+  for (const check of checks) {
+    await expect(check).toBeChecked();
+  }
+
+  await selectAll.click();
+
+  for (const check of checks) {
+    await expect(check).not.toBeChecked();
+  }
 });

@@ -3,9 +3,10 @@ export const showButton = document.querySelector<HTMLDialogElement>('#showDialog
 export const closeButton = document.querySelector<HTMLDialogElement>('#closeDialog');
 export const resultElement = document.getElementById('dialogBox');
 export const errorDisplay = document.querySelector('#errorMessage')!;
-export const checks = document.querySelectorAll<HTMLInputElement>('.third-checks');
-export const checkAll = document.querySelector<HTMLInputElement>('.checkAlls');
-
+export const thirdChecks = document.querySelectorAll<HTMLInputElement>('.third-checks');
+export const firstChecks = document.querySelectorAll<HTMLInputElement>('.first-checks');
+export const checkAllsThird = document.querySelector<HTMLInputElement>('.checkAllsThird');
+export const checkAllsFirst = document.querySelector<HTMLInputElement>('.checkAllsFirst');
 export function openDialog(targetScore: number, score: string[]) {
   // メッセージ表示を初期化する
   errorDisplay.textContent = '';
@@ -19,9 +20,9 @@ export function closeDialog() {
   }
 }
 
-export function toggleAllChecks() {
-  const isChecked = !!checkAll?.checked;
-  checks.forEach((check) => {
+export function toggleAllChecks(element: HTMLInputElement, targets: NodeListOf<HTMLInputElement>) {
+  const isChecked = element.checked;
+  targets.forEach((check) => {
     check.checked = isChecked;
   });
 }
