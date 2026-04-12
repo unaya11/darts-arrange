@@ -3,7 +3,8 @@ import { allNumbers, leftNumbers } from './constants/darts';
 import { addSingleNumberThrowList, calcScore } from './logic/score';
 import { getInputNumber, getSelectNumbers } from './ui/dartsInputReader';
 import {
-  checkAll,
+  checkAllsFirst,
+  checkAllsThird,
   closeButton,
   closeDialog,
   createErrorMessage,
@@ -12,8 +13,16 @@ import {
   toggleAllChecks,
 } from './ui/view';
 
-checkAll?.addEventListener('click', () => {
-  toggleAllChecks();
+// 1本目の全選択
+checkAllsFirst?.addEventListener('click', () => {
+  const firstChecks = document.querySelectorAll<HTMLInputElement>('.first-checks');
+  toggleAllChecks(checkAllsFirst!, firstChecks);
+});
+
+// 上がり目の全選択
+checkAllsThird?.addEventListener('click', () => {
+  const thirdChecks = document.querySelectorAll<HTMLInputElement>('.third-checks');
+  toggleAllChecks(checkAllsThird!, thirdChecks);
 });
 
 showButton?.addEventListener('click', () => {
