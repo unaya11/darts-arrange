@@ -1,6 +1,7 @@
 const numbers = Array.from({ length: 20 }, (_, i) => i + 1);
 const bull = [50, 25];
 export const leftNumbers = [...numbers.flatMap((num) => [num * 2]), 50];
+export const scoringNumbers = [...numbers.flatMap((num) => [num, num * 3]), 50];
 
 // 結果を降順に表示するため、reverseする
 // reverse()と違いtoReversed()は元の配列の中身を変更しない

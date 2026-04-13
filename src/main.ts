@@ -1,5 +1,5 @@
 import './styles/main.css';
-import { allNumbers, leftNumbers } from './constants/darts';
+import { leftNumbers, scoringNumbers } from './constants/darts';
 import { addSingleNumberThrowList, calcScore } from './logic/score';
 import { getInputNumber, getSelectNumbers } from './ui/dartsInputReader';
 import {
@@ -30,7 +30,7 @@ showButton?.addEventListener('click', () => {
   const selectFirstNumbers = getSelectNumbers('input[type=checkbox]:checked.first-checks');
   const firstThrowList = selectFirstNumbers
     ? addSingleNumberThrowList(selectFirstNumbers)
-    : allNumbers;
+    : scoringNumbers;
 
   // 三投目が指定されている場合はその値を、指定されていない場合はすべてのダブルを対象とする
   const selectThirdNumbers = getSelectNumbers('input[type=checkbox]:checked.third-checks');
