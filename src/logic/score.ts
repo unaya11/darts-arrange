@@ -1,4 +1,4 @@
-import { allNumbers } from '@/constants/darts';
+import { allNumbers, notBogyNumbers, scoringNumbers, scoringNumbers2 } from '@/constants/darts';
 import { NoResultError } from '@/constants/error';
 
 export function calcScore(
@@ -6,20 +6,30 @@ export function calcScore(
   firstThrowList: number[],
   thirdThrowList: number[],
 ): string[] {
-  const resultList: string[] = [];
+  if (targetScore <= 170) {
+    return under170(targetScore, firstThrowList, thirdThrowList);
+  } else {
+    return over171(targetScore);
+  }
+}
 
+function under170(
+  targetScore: number,
+  firstThrowList: number[],
+  thirdThrowList: number[],
+): string[] {
+  const resultList: string[] = [];
   // 1投目と3投目は決まっているので2本目に必要なスコアを出す
   for (const firstThrow of firstThrowList) {
     // 2本で削るスコアを計算する
-    thirdThrowList.forEach((thirdThrow) => {
+    for (const thirdThrow of thirdThrowList) {
       // 入力値から1、3本目を引いて2本目で削るスコアを出す
       const secondThrow = targetScore - firstThrow - thirdThrow;
-
       // 存在すれば結果に追加する
       if (allNumbers.includes(secondThrow)) {
         resultList.push(`${firstThrow}-${secondThrow}-${thirdThrow}`);
       }
-    });
+    }
   }
   if (resultList.length === 0) {
     throw new NoResultError();
@@ -27,6 +37,34 @@ export function calcScore(
   // 重複を排除するためSetに収めた後、配列に戻す
   const set = new Set(resultList);
   return Array.from(set);
+}
+
+function over171(targetScore: number): string[] {
+  const resultList: string[] = [];
+  for (const i of scoringNumbers2) {
+    for (const j of scoringNumbers2) {
+      for (const k of scoringNumbers2) {
+        if (j === 25 || i === 25) {
+          continue;
+        }
+        const result = i + j + k;
+        const a = targetScore - result;
+        if (a <= 170) {
+          if (notBogyNumbers.includes(a)) {
+            resultList.push(`${i}-${j}-${k} 残は${a}`);
+          }
+        }
+      }
+    }
+  }
+  resultList.sort((a, b) => {
+    const remainA = parseInt(a.split('残は')[1]);
+    const remainB = parseInt(b.split('残は')[1]);
+    console.log(remainB - remainA);
+    return remainB - remainA;
+  });
+  // 重複は排除せずに返す
+  return resultList;
 }
 
 // 一投目の指定がされた場合、外した場合も考慮してシングルもリストに追加する
