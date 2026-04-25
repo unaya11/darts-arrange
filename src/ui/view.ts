@@ -38,8 +38,13 @@ export function createView(calcScoreList: string[], inputNumber: number) {
   calcScoreList.forEach((scoreText) => {
     const p = document.createElement('p');
     // TODO PR環境で動かすため
-    p.textContent = `${scoreText.route}, ${scoreText.nextTarget}`;
-    resultElement.appendChild(p);
+    if (scoreText.route !== undefined) {
+      p.textContent = `${scoreText.route}, ${scoreText.nextTarget}`;
+      resultElement.appendChild(p);
+    } else {
+      p.textContent = scoreText;
+      resultElement.appendChild(p);
+    }
   });
 }
 
