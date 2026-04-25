@@ -1,11 +1,18 @@
-import { allNumbers, notBogyNumbers, scoringNumbers, scoringNumbers2 } from '@/constants/darts';
+import {
+  allNumbers,
+  bull,
+  EvaluatedRoute,
+  notBogyNumbers,
+  scoringNumbers2,
+  singleNumbers,
+} from '@/constants/darts';
 import { NoResultError } from '@/constants/error';
 
 export function calcScore(
   targetScore: number,
   firstThrowList: number[],
   thirdThrowList: number[],
-): string[] {
+): EvaluatedRoute[] {
   if (targetScore <= 170) {
     return under170(targetScore, firstThrowList, thirdThrowList);
   } else {
@@ -39,30 +46,40 @@ function under170(
   return Array.from(set);
 }
 
-function over171(targetScore: number): string[] {
-  const resultList: string[] = [];
-  for (const i of scoringNumbers2) {
-    for (const j of scoringNumbers2) {
-      for (const k of scoringNumbers2) {
-        if (j === 25 || i === 25) {
-          continue;
-        }
-        const result = i + j + k;
-        const a = targetScore - result;
-        if (a <= 170) {
-          if (notBogyNumbers.includes(a)) {
-            resultList.push(`${i}-${j}-${k} 残は${a}`);
+// TODO PR環境で動かすため
+function over171(targetScore: number): EvaluatedRoute[] {
+  const resultList: EvaluatedRoute[] = [];
+  const luckyNumbers = new Set<number>();
+  const baseNumbers = scoringNumbers2.filter((num) => !bull.includes(num));
+
+  for (const first of baseNumbers) {
+    for (const second of baseNumbers) {
+      for (const third of scoringNumbers2) {
+        const result = first + second + third;
+        const remainScore = targetScore - result;
+
+        if (remainScore <= 170) {
+          if (notBogyNumbers.includes(remainScore)) {
+            if (singleNumbers.includes(first)) {
+              luckyNumbers.add(first);
+            }
+            resultList.push({
+              route: `${first}-${second}-${third}`,
+              score: 0,
+              nextTarget: remainScore,
+            });
           }
         }
       }
     }
   }
-  resultList.sort((a, b) => {
-    const remainA = parseInt(a.split('残は')[1]);
-    const remainB = parseInt(b.split('残は')[1]);
-    console.log(remainB - remainA);
-    return remainB - remainA;
+  // TODO PR環境で動かすため
+  const strategySet = new Set([...luckyNumbers].flatMap((num) => [num, num * 3]));
+  resultList.forEach((item) => {
+    item.score = evaluateArrangementQuality(item, targetScore, strategySet);
   });
+  resultList.sort((a, b) => b.score - a.score);
+  console.log(resultList);
   // 重複は排除せずに返す
   return resultList;
 }
@@ -79,4 +96,31 @@ export function addSingleNumberThrowList(score: number[]): number[] {
     firstThrowList.push(25);
   }
   return firstThrowList;
+}
+// TODO PR環境で動かすため
+function evaluateArrangementQuality(
+  item: EvaluatedRoute,
+  targetScore: number,
+  luckyNumbers: Set<number>,
+): number {
+  let currentScore = 0;
+  // 文字列 "19-57-57" を [19, 57, 57] という数字の配列に戻す
+  const [first, second, third] = item.route.split('-').map(Number);
+  // 1,2本目が同じエリアか
+  if (second % first === 0 && second / first <= 3) {
+    currentScore += 1;
+  }
+  // 同じ数字を連続して打てるか
+  if (first % second === 0 || second % third === 0) {
+    currentScore += 1;
+  }
+  // BULLを打つ必要があるか
+  if (bull.includes(third)) {
+    currentScore -= 1;
+  }
+  // シングルが使えるルートか
+  if (luckyNumbers.has(first)) {
+    currentScore += 11111;
+  }
+  return currentScore;
 }
