@@ -1,6 +1,7 @@
 import {
   allNumbers,
   bull,
+  bogyNumbers,
   EvaluatedRoute,
   notBogyNumbers,
   scoringNumbers2,
@@ -59,12 +60,12 @@ function over171(targetScore: number): EvaluatedRoute[] {
         const remainScore = targetScore - result;
 
         if (remainScore <= 170) {
-          if (notBogyNumbers.includes(remainScore)) {
+          if (!bogyNumbers.includes(remainScore)) {
             if (singleNumbers.includes(first)) {
               luckyNumbers.add(first);
             }
             resultList.push({
-              route: `${first}-${second}-${third}`,
+              route: [first, second, third],
               score: 0,
               nextTarget: remainScore,
             });
@@ -73,10 +74,12 @@ function over171(targetScore: number): EvaluatedRoute[] {
       }
     }
   }
-  // TODO PR環境で動かすため
-  const strategySet = new Set([...luckyNumbers].flatMap((num) => [num, num * 3]));
+
+  // const strategySet = new Set([...luckyNumbers].flatMap((num) => [num, num * 3]));
+  console.log(luckyNumbers);
   resultList.forEach((item) => {
-    item.score = evaluateArrangementQuality(item, targetScore, strategySet);
+    // item.score = evaluateArrangementQuality(item, targetScore, strategySet);
+    item.score = evaluateArrangementQuality(item, targetScore, luckyNumbers);
   });
   resultList.sort((a, b) => b.score - a.score);
   console.log(resultList);
@@ -97,30 +100,60 @@ export function addSingleNumberThrowList(score: number[]): number[] {
   }
   return firstThrowList;
 }
-// TODO PR環境で動かすため
+
 function evaluateArrangementQuality(
   item: EvaluatedRoute,
   targetScore: number,
   luckyNumbers: Set<number>,
 ): number {
   let currentScore = 0;
-  // 文字列 "19-57-57" を [19, 57, 57] という数字の配列に戻す
-  const [first, second, third] = item.route.split('-').map(Number);
+
+  const [first, second, third] = item.route;
   // 1,2本目が同じエリアか
   if (second % first === 0 && second / first <= 3) {
     currentScore += 1;
   }
-  // 同じ数字を連続して打てるか
-  if (first % second === 0 || second % third === 0) {
-    currentScore += 1;
+  // シングルが使えるルートか
+  if (luckyNumbers.has(first)) {
+    currentScore += 10;
   }
   // BULLを打つ必要があるか
   if (bull.includes(third)) {
-    currentScore -= 1;
+    currentScore += 5;
   }
-  // シングルが使えるルートか
-  if (luckyNumbers.has(first)) {
-    currentScore += 11111;
+  const strategySet = new Set([...luckyNumbers].flatMap((num) => [num, num * 3]));
+
+  if (strategySet.has(first)) {
+    currentScore += 1;
   }
+  if (isSameArea(item.route)) {
+    currentScore += 4;
+  }
+  // 同じ数字を連続して打てるか
+  // if (first % second === 0 || second % third === 0) {
+  //   currentScore += 100;
+  // }
+
+  // if (strategySet.has(second)) {
+  //   currentScore += 1;
+  // }
+
+  // if (isSameArea(item.route) && singleNumbers.includes(first)) {
+  //   currentScore += 31;
+  // }
   return currentScore;
+}
+
+// 3本全て同じエリアに投げているか判定する
+function isSameArea(numbers: number[]): boolean {
+  const reverseSingleNumbers = singleNumbers.toReversed();
+  for (const i of reverseSingleNumbers) {
+    const isCheck = numbers.every((number) => {
+      return number % i === 0 && number / i <= 3;
+    });
+    if (isCheck) {
+      return true;
+    }
+  }
+  return false;
 }
