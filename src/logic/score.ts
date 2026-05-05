@@ -1,7 +1,7 @@
 import {
   allNumbers,
-  bull,
   bogyNumbers,
+  bull,
   EvaluatedRoute,
   notBogyNumbers,
   scoringNumbers2,
@@ -25,8 +25,8 @@ function under170(
   targetScore: number,
   firstThrowList: number[],
   thirdThrowList: number[],
-): string[] {
-  const resultList: string[] = [];
+): EvaluatedRoute[] {
+  const resultSet = new Set<string>();
   // 1投目と3投目は決まっているので2本目に必要なスコアを出す
   for (const firstThrow of firstThrowList) {
     // 2本で削るスコアを計算する
@@ -35,19 +35,24 @@ function under170(
       const secondThrow = targetScore - firstThrow - thirdThrow;
       // 存在すれば結果に追加する
       if (allNumbers.includes(secondThrow)) {
-        resultList.push(`${firstThrow}-${secondThrow}-${thirdThrow}`);
+        resultSet.add(`${firstThrow}-${secondThrow}-${thirdThrow}`);
       }
     }
   }
-  if (resultList.length === 0) {
+  if (resultSet.size === 0) {
     throw new NoResultError();
   }
-  // 重複を排除するためSetに収めた後、配列に戻す
-  const set = new Set(resultList);
-  return Array.from(set);
+  console.log(resultSet);
+  return Array.from(resultSet).map((item) => {
+    const parts = item.split('-').map(Number);
+    return {
+      route: [parts[0], parts[1], parts[2]],
+      score: 0,
+      nextTarget: 0,
+    };
+  });
 }
 
-// TODO PR環境で動かすため
 function over171(targetScore: number): EvaluatedRoute[] {
   const resultList: EvaluatedRoute[] = [];
   const luckyNumbers = new Set<number>();
@@ -85,7 +90,7 @@ function over171(targetScore: number): EvaluatedRoute[] {
   }
   const resultList2 = removeDuplicatesList(resultList);
   resultList2.forEach((item) => {
-    item.score = evaluateArrangementQuality(item, targetScore, luckyNumbers);
+    item.score = evaluateArrangementQuality(item, luckyNumbers);
   });
   resultList2.sort((a, b) => b.score - a.score);
   console.log(resultList2);
@@ -107,11 +112,7 @@ export function addSingleNumberThrowList(score: number[]): number[] {
   return firstThrowList;
 }
 
-function evaluateArrangementQuality(
-  item: EvaluatedRoute,
-  targetScore: number,
-  luckyNumbers: Set<number>,
-): number {
+function evaluateArrangementQuality(item: EvaluatedRoute, luckyNumbers: Set<number>): number {
   let currentScore = 0;
 
   const [first, second, third] = item.route;
@@ -135,18 +136,6 @@ function evaluateArrangementQuality(
   if (isSameArea(item.route)) {
     currentScore += 4;
   }
-  // 同じ数字を連続して打てるか
-  // if (first % second === 0 || second % third === 0) {
-  //   currentScore += 100;
-  // }
-
-  // if (strategySet.has(second)) {
-  //   currentScore += 1;
-  // }
-
-  // if (isSameArea(item.route) && singleNumbers.includes(first)) {
-  //   currentScore += 31;
-  // }
   return currentScore;
 }
 

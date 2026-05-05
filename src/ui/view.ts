@@ -9,7 +9,7 @@ export const thirdChecks = document.querySelectorAll<HTMLInputElement>('.third-c
 export const firstChecks = document.querySelectorAll<HTMLInputElement>('.first-checks');
 export const checkAllsThird = document.querySelector<HTMLInputElement>('.checkAllsThird');
 export const checkAllsFirst = document.querySelector<HTMLInputElement>('.checkAllsFirst');
-export function openDialog(targetScore: number, score: string[]) {
+export function openDialog(targetScore: number, score: EvaluatedRoute[]) {
   // メッセージ表示を初期化する
   errorDisplay.textContent = '';
   createView(targetScore, score);
@@ -39,17 +39,13 @@ export function createView(inputNumber: number, calcScoreList: EvaluatedRoute[])
 
   calcScoreList.forEach((scoreText) => {
     const p = document.createElement('p');
-    console.log(scoreText);
-    // TODO PR環境で動かすため
-    // if (scoreText !== undefined) {
-    //   const parts = (scoreText as string).split(',');
-    //   p.textContent = `${parts[0]}-${parts[1]}-${parts[2]}, 残は${parts[3]}`;
-    if (scoreText.route !== undefined) {
-      p.textContent = `${scoreText.route}, ${scoreText.nextTarget}`;
+    const routeText = scoreText.route.join('-');
+
+    if (scoreText.nextTarget === 0) {
+      p.textContent = `${routeText}`;
       resultElement.appendChild(p);
-      console.log('321はこちら');
     } else {
-      p.textContent = scoreText;
+      p.textContent = `${routeText} 残は${scoreText.nextTarget}`;
       resultElement.appendChild(p);
     }
   });

@@ -36,7 +36,7 @@ showButton?.addEventListener('click', () => {
   const selectThirdNumbers = getSelectNumbers('input[type=checkbox]:checked.third-checks');
   const thirdThrowList = selectThirdNumbers ?? leftNumbers;
   let targetScore: number;
-  let calcScoreList: string[];
+  let calcScoreList: EvaluatedRoute[];
 
   try {
     targetScore = getInputNumber();
