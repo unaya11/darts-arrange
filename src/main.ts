@@ -1,5 +1,5 @@
 import './styles/main.css';
-import { leftNumbers, scoringNumbers } from './constants/darts';
+import { EvaluatedRoute, leftNumbers, scoringNumbers } from './constants/darts';
 import { addSingleNumberThrowList, calcScore } from './logic/score';
 import { getInputNumber, getSelectNumbers } from './ui/dartsInputReader';
 import {

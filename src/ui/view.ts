@@ -1,3 +1,5 @@
+import { EvaluatedRoute } from '@/constants/darts';
+
 export const dialog = document.querySelector<HTMLDialogElement>('dialog');
 export const showButton = document.querySelector<HTMLDialogElement>('#showDialog');
 export const closeButton = document.querySelector<HTMLDialogElement>('#closeDialog');
@@ -10,7 +12,7 @@ export const checkAllsFirst = document.querySelector<HTMLInputElement>('.checkAl
 export function openDialog(targetScore: number, score: string[]) {
   // メッセージ表示を初期化する
   errorDisplay.textContent = '';
-  createView(score, targetScore);
+  createView(targetScore, score);
   dialog?.showModal();
 }
 
@@ -27,7 +29,7 @@ export function toggleAllChecks(element: HTMLInputElement, targets: NodeListOf<H
   });
 }
 
-export function createView(calcScoreList: string[], inputNumber: number) {
+export function createView(inputNumber: number, calcScoreList: EvaluatedRoute[]) {
   if (!resultElement) return;
   const title = document.getElementById('dialogTitle');
   if (title) {
@@ -37,10 +39,15 @@ export function createView(calcScoreList: string[], inputNumber: number) {
 
   calcScoreList.forEach((scoreText) => {
     const p = document.createElement('p');
+    console.log(scoreText);
     // TODO PR環境で動かすため
+    // if (scoreText !== undefined) {
+    //   const parts = (scoreText as string).split(',');
+    //   p.textContent = `${parts[0]}-${parts[1]}-${parts[2]}, 残は${parts[3]}`;
     if (scoreText.route !== undefined) {
       p.textContent = `${scoreText.route}, ${scoreText.nextTarget}`;
       resultElement.appendChild(p);
+      console.log('321はこちら');
     } else {
       p.textContent = scoreText;
       resultElement.appendChild(p);

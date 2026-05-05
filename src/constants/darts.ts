@@ -7,7 +7,7 @@ export const scoringNumbers2 = [60, 57, 54, 20, 19, 18, 17, ...bull];
 // TODO PR環境で動かすため
 export const singleNumbers = numbers;
 export type EvaluatedRoute = {
-  route: string;
+  route: number[];
   score: number;
   nextTarget: number;
 };

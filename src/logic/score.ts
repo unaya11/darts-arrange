@@ -59,6 +59,15 @@ function over171(targetScore: number): EvaluatedRoute[] {
         const result = first + second + third;
         const remainScore = targetScore - result;
 
+        // 3本目がアウターブルの場合、残りスコアがnotBogyNumbersにならない場合はスキップ
+        if (third === 25 && !notBogyNumbers.includes(remainScore)) {
+          continue;
+        }
+        // 3本目がインナーブルの場合、残りスコアがnotBogyNumbersにならない場合はスキップ
+        if (third == 50 && !notBogyNumbers.includes(remainScore)) {
+          continue;
+        }
+
         if (remainScore <= 170) {
           if (!bogyNumbers.includes(remainScore)) {
             if (singleNumbers.includes(first)) {
@@ -74,17 +83,14 @@ function over171(targetScore: number): EvaluatedRoute[] {
       }
     }
   }
-
-  // const strategySet = new Set([...luckyNumbers].flatMap((num) => [num, num * 3]));
-  console.log(luckyNumbers);
-  resultList.forEach((item) => {
-    // item.score = evaluateArrangementQuality(item, targetScore, strategySet);
+  const resultList2 = removeDuplicatesList(resultList);
+  resultList2.forEach((item) => {
     item.score = evaluateArrangementQuality(item, targetScore, luckyNumbers);
   });
-  resultList.sort((a, b) => b.score - a.score);
-  console.log(resultList);
+  resultList2.sort((a, b) => b.score - a.score);
+  console.log(resultList2);
   // 重複は排除せずに返す
-  return resultList;
+  return resultList2;
 }
 
 // 一投目の指定がされた場合、外した場合も考慮してシングルもリストに追加する
@@ -156,4 +162,26 @@ function isSameArea(numbers: number[]): boolean {
     }
   }
   return false;
+}
+
+// リスト内の残りスコアと2,3本目の組み合わせが同じものを削除
+function removeDuplicatesList(resultList: EvaluatedRoute[]): EvaluatedRoute[] {
+  const set = new Set();
+  const resultList2: EvaluatedRoute[] = [];
+  resultList.forEach((item) => {
+    const [a, b, c] = item.route;
+    const sortedPart = [b, c, item.nextTarget].sort((x, y) => x - y);
+    const sub = [a, ...sortedPart].toString();
+    set.add(sub);
+  });
+
+  set.forEach((item) => {
+    const parts = (item as string).split(',');
+    resultList2.push({
+      route: [Number(parts[0]), Number(parts[2]), Number(parts[1])],
+      score: 0,
+      nextTarget: Number(parts[3]),
+    });
+  });
+  return resultList2;
 }
