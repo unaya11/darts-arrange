@@ -1,7 +1,7 @@
 import './styles/main.css';
-import { EvaluatedRoute, leftNumbers, scoringNumbers } from './constants/darts';
-import { addSingleNumberThrowList, calcScore } from './logic/score';
-import { getInputNumber, getSelectNumbers } from './ui/dartsInputReader';
+import { EvaluatedRoute, leftNumbers, scoringNumbers } from '@/constants/darts';
+import { addSingleNumberThrowList, calcScore } from '@/logic/score';
+import { getInputNumber, getSelectNumbers } from '@/ui/dartsInputReader';
 import {
   checkAllsFirst,
   checkAllsThird,
@@ -13,7 +13,7 @@ import {
   showButton,
   thirdChecks,
   toggleAllChecks,
-} from './ui/view';
+} from '@/ui/view';
 
 // 1本目の全選択
 checkAllsFirst?.addEventListener('click', () => {
