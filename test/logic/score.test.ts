@@ -27,7 +27,8 @@ describe('calcScoreのテスト', () => {
     expect(resultList.length).toBeGreaterThan(0);
 
     resultList.forEach((result) => {
-      const [f, s, t] = result.split('-').map(Number);
+      console.log(result);
+      const [f, s, t] = result.route.map(Number);
       expect(f + s + t).toBe(targetScore);
     });
   });

@@ -64,7 +64,6 @@ function calcCheckoutScore(
   if (resultSet.size === 0) {
     throw new NoResultError();
   }
-  console.log(resultSet);
   return Array.from(resultSet).map((item) => {
     const parts = item.split('-').map(Number);
     return {
@@ -117,6 +116,9 @@ function calcHighRangeScore(targetScore: number): EvaluatedRoute[] {
   resultList2.sort((a, b) => b.score - a.score);
   console.log(resultList2);
   // 重複は排除せずに返す
+  if (resultList.length === 0) {
+    throw new NoResultError();
+  }
   return resultList2;
 }
 
