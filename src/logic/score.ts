@@ -15,13 +15,35 @@ export function calcScore(
   thirdThrowList: number[],
 ): EvaluatedRoute[] {
   if (targetScore <= 170) {
-    return under170(targetScore, firstThrowList, thirdThrowList);
-  } else {
-    return over171(targetScore);
+    return calcCheckoutScore(targetScore, firstThrowList, thirdThrowList);
   }
+  if (targetScore <= 235) {
+    return calcMiddleRangeScore(targetScore);
+  }
+  return calcHighRangeScore(targetScore);
 }
 
-function under170(
+function calcMiddleRangeScore(targetScore: number): EvaluatedRoute[] {
+  const resultList: EvaluatedRoute[] = [];
+  const scoringNumbers = [20, 19, 18, 17];
+  const numbers = [20, 19, 18, 17, 25];
+  for (const first of scoringNumbers) {
+    for (const second of scoringNumbers) {
+      for (const third of numbers) {
+        const remainScore = targetScore - first - second - third;
+        if (remainScore <= 170 && !bogyNumbers.includes(remainScore)) {
+          resultList.push({
+            route: [first, second, third],
+            score: 0,
+            nextTarget: remainScore,
+          });
+        }
+      }
+    }
+  }
+  return resultList;
+}
+function calcCheckoutScore(
   targetScore: number,
   firstThrowList: number[],
   thirdThrowList: number[],
@@ -53,7 +75,7 @@ function under170(
   });
 }
 
-function over171(targetScore: number): EvaluatedRoute[] {
+function calcHighRangeScore(targetScore: number): EvaluatedRoute[] {
   const resultList: EvaluatedRoute[] = [];
   const luckyNumbers = new Set<number>();
   const baseNumbers = scoringNumbers2.filter((num) => !bull.includes(num));
