@@ -43,6 +43,7 @@ function calcMiddleRangeScore(targetScore: number): EvaluatedRoute[] {
   }
   return resultList;
 }
+
 function calcCheckoutScore(
   targetScore: number,
   firstThrowList: number[],
@@ -90,7 +91,7 @@ function calcHighRangeScore(targetScore: number): EvaluatedRoute[] {
           continue;
         }
         // 3本目がインナーブルの場合、残りスコアがnotBogyNumbersにならない場合はスキップ
-        if (third == 50 && !notBogyNumbers.includes(remainScore)) {
+        if (third === 50 && !notBogyNumbers.includes(remainScore)) {
           continue;
         }
 
@@ -179,22 +180,15 @@ function isSameArea(numbers: number[]): boolean {
 
 // リスト内の残りスコアと2,3本目の組み合わせが同じものを削除
 function removeDuplicatesList(resultList: EvaluatedRoute[]): EvaluatedRoute[] {
-  const set = new Set();
-  const resultList2: EvaluatedRoute[] = [];
+  const map = new Map<string, EvaluatedRoute>();
   resultList.forEach((item) => {
     const [a, b, c] = item.route;
-    const sortedPart = [b, c, item.nextTarget].sort((x, y) => x - y);
-    const sub = [a, ...sortedPart].toString();
-    set.add(sub);
+    const normalizedBC = [b, c].sort((x, y) => x - y);
+    const key = `${a}-${normalizedBC[0]}-${normalizedBC[1]}-${item.nextTarget}`;
+    if (!map.has(key)) {
+      map.set(key, item);
+    }
   });
 
-  set.forEach((item) => {
-    const parts = (item as string).split(',');
-    resultList2.push({
-      route: [Number(parts[0]), Number(parts[2]), Number(parts[1])],
-      score: 0,
-      nextTarget: Number(parts[3]),
-    });
-  });
-  return resultList2;
+  return Array.from(map.values());
 }
