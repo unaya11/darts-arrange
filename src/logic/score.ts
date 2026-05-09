@@ -1,10 +1,13 @@
 import {
   allNumbers,
+  baseNumbers,
   bogyNumbers,
   bull,
   EvaluatedRoute,
   notBogyNumbers,
+  numbers1,
   scoringNumbers2,
+  scoringNumbers3,
   singleNumbers,
 } from '@/constants/darts';
 import { NoResultError } from '@/constants/error';
@@ -18,20 +21,31 @@ export function calcScore(
     return calcCheckoutScore(targetScore, firstThrowList, thirdThrowList);
   }
   if (targetScore <= 235) {
-    return calcMiddleRangeScore(targetScore);
+    return generateAndRankRoutes(targetScore, scoringNumbers3, numbers1);
   }
-  return calcHighRangeScore(targetScore);
+  return generateAndRankRoutes(targetScore, baseNumbers, scoringNumbers2);
 }
 
-function calcMiddleRangeScore(targetScore: number): EvaluatedRoute[] {
+function generateAndRankRoutes(
+  targetScore: number,
+  firstThrowList: number[],
+  thirdThrowList: number[],
+): EvaluatedRoute[] {
+  const luckyNumbers = new Set<number>();
   const resultList: EvaluatedRoute[] = [];
-  const scoringNumbers = [20, 19, 18, 17];
-  const numbers = [20, 19, 18, 17, 25];
-  for (const first of scoringNumbers) {
-    for (const second of scoringNumbers) {
-      for (const third of numbers) {
+  for (const first of firstThrowList) {
+    for (const second of firstThrowList) {
+      for (const third of thirdThrowList) {
         const remainScore = targetScore - first - second - third;
+
+        // 3本目がブルの場合、残りスコアがnotBogyNumbersにならない場合はスキップ
+        if (bull.includes(third) && !notBogyNumbers.includes(remainScore)) {
+          continue;
+        }
         if (remainScore <= 170 && !bogyNumbers.includes(remainScore)) {
+          if (singleNumbers.includes(first)) {
+            luckyNumbers.add(first);
+          }
           resultList.push({
             route: [first, second, third],
             score: 0,
@@ -41,7 +55,16 @@ function calcMiddleRangeScore(targetScore: number): EvaluatedRoute[] {
       }
     }
   }
-  return resultList;
+  const duplicatesList = removeDuplicatesList(resultList);
+  duplicatesList.forEach((item) => {
+    item.score = evaluateArrangementQuality(item, luckyNumbers);
+  });
+  duplicatesList.sort((a, b) => b.score - a.score);
+  // 重複は排除せずに返す
+  if (resultList.length === 0) {
+    throw new NoResultError();
+  }
+  return duplicatesList;
 }
 
 function calcCheckoutScore(
@@ -73,54 +96,6 @@ function calcCheckoutScore(
       nextTarget: 0,
     };
   });
-}
-
-function calcHighRangeScore(targetScore: number): EvaluatedRoute[] {
-  const resultList: EvaluatedRoute[] = [];
-  const luckyNumbers = new Set<number>();
-  const baseNumbers = scoringNumbers2.filter((num) => !bull.includes(num));
-
-  for (const first of baseNumbers) {
-    for (const second of baseNumbers) {
-      for (const third of scoringNumbers2) {
-        const result = first + second + third;
-        const remainScore = targetScore - result;
-
-        // 3本目がアウターブルの場合、残りスコアがnotBogyNumbersにならない場合はスキップ
-        if (third === 25 && !notBogyNumbers.includes(remainScore)) {
-          continue;
-        }
-        // 3本目がインナーブルの場合、残りスコアがnotBogyNumbersにならない場合はスキップ
-        if (third === 50 && !notBogyNumbers.includes(remainScore)) {
-          continue;
-        }
-
-        if (remainScore <= 170) {
-          if (!bogyNumbers.includes(remainScore)) {
-            if (singleNumbers.includes(first)) {
-              luckyNumbers.add(first);
-            }
-            resultList.push({
-              route: [first, second, third],
-              score: 0,
-              nextTarget: remainScore,
-            });
-          }
-        }
-      }
-    }
-  }
-  const resultList2 = removeDuplicatesList(resultList);
-  resultList2.forEach((item) => {
-    item.score = evaluateArrangementQuality(item, luckyNumbers);
-  });
-  resultList2.sort((a, b) => b.score - a.score);
-  console.log(resultList2);
-  // 重複は排除せずに返す
-  if (resultList.length === 0) {
-    throw new NoResultError();
-  }
-  return resultList2;
 }
 
 // 一投目の指定がされた場合、外した場合も考慮してシングルもリストに追加する

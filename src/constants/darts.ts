@@ -3,7 +3,9 @@ export const bull = [50, 25];
 export const leftNumbers = [...numbers.flatMap((num) => [num * 2]), 50];
 export const scoringNumbers = [...numbers.flatMap((num) => [num, num * 3]), ...bull];
 export const scoringNumbers2 = [60, 57, 54, 20, 19, 18, 17, ...bull];
-
+export const baseNumbers = scoringNumbers2.filter((num) => !bull.includes(num));
+export const scoringNumbers3 = [20, 19, 18, 17];
+export const numbers1 = [20, 19, 18, 17, 25];
 // TODO PR環境で動かすため
 export const singleNumbers = numbers;
 export type EvaluatedRoute = {
