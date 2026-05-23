@@ -35,17 +35,15 @@ showButton?.addEventListener('click', () => {
   // 三投目が指定されている場合はその値を、指定されていない場合はすべてのダブルを対象とする
   const selectThirdNumbers = getSelectNumbers('input[type=checkbox]:checked.third-checks');
   const thirdThrowList = selectThirdNumbers ?? leftNumbers;
-  let targetScore: number;
-  let calcScoreList: EvaluatedRoute[];
 
   try {
-    targetScore = getInputNumber();
-    calcScoreList = calcScore(targetScore, firstThrowList, thirdThrowList);
+    const targetScore = getInputNumber();
+    const calcScoreList = calcScore(targetScore, firstThrowList, thirdThrowList);
+    openDialog(targetScore, calcScoreList);
   } catch (e) {
     createErrorMessage(e);
     return;
   }
-  openDialog(targetScore, calcScoreList);
 });
 
 closeButton?.addEventListener('click', () => {

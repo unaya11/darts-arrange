@@ -11,7 +11,7 @@
     "test": "vitest run",
     "test:coverage": "vitest run --coverage",
     "lint": "eslint . --fix",
-    "e2e": "playwright test --ui"
+    "e2e": "playwright test"
   },
   "repository": {
     "type": "git",
