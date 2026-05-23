@@ -1,4 +1,4 @@
-import { allNumbers, notBogyNumbers, singleNumbers } from '@/constants/darts';
+import { allNumbers, checkOutNumbers, NUMBERS } from '@/constants/darts';
 import { NoResultError } from '@/constants/error';
 import * as scoreLogic from '@/logic/score';
 
@@ -89,7 +89,7 @@ describe('calcScoreのテスト_calcCheckoutScore', () => {
       bullRoutes.forEach((r) => {
         // bull.includes(r.route[2]) の時、nextTarget は必ず 170以下の非ボギー
         expect(r.nextTarget).toBeLessThanOrEqual(170);
-        expect(notBogyNumbers).toContain(r.nextTarget);
+        expect(checkOutNumbers).toContain(r.nextTarget);
       });
     });
 
@@ -110,7 +110,7 @@ describe('calcScoreのテスト_calcCheckoutScore', () => {
       const resultList = scoreLogic.calcScore(250, [], []);
 
       // 1投目がシングルのルートを探す
-      const singleFirstRoute = resultList.find((r) => singleNumbers.includes(r.route[0]));
+      const singleFirstRoute = resultList.find((r) => NUMBERS.includes(r.route[0]));
 
       // シングルが luckyNumbers に追加され、evaluateArrangementQuality で加点されているはず
       if (singleFirstRoute) {
@@ -203,7 +203,7 @@ describe('chatGPTに書かせてみた', () => {
         const bullRoutes = resultList.filter((r) => r.route[2] === 25 || r.route[2] === 50);
         bullRoutes.forEach((r) => {
           expect(r.nextTarget).toBeLessThanOrEqual(170);
-          expect(notBogyNumbers).toContain(r.nextTarget);
+          expect(checkOutNumbers).toContain(r.nextTarget);
         });
       });
       it('スコアが降順にソートされていること', () => {
@@ -214,8 +214,8 @@ describe('chatGPTに書かせてみた', () => {
       });
       it('シングル始動の方が高スコアになること', () => {
         const resultList = calcScore(250, [], []);
-        const singleRoute = resultList.find((r) => singleNumbers.includes(r.route[0]));
-        const nonSingleRoute = resultList.find((r) => !singleNumbers.includes(r.route[0]));
+        const singleRoute = resultList.find((r) => NUMBERS.includes(r.route[0]));
+        const nonSingleRoute = resultList.find((r) => !NUMBERS.includes(r.route[0]));
         if (singleRoute && nonSingleRoute) {
           expect(singleRoute.score).toBeGreaterThan(nonSingleRoute.score);
         }

@@ -1,14 +1,14 @@
 import {
   allNumbers,
-  baseNumbers,
-  bogyNumbers,
-  bull,
+  bogeyNumbers,
+  BULL,
+  checkOutNumbers,
   EvaluatedRoute,
-  notBogyNumbers,
-  numbers1,
-  scoringNumbers2,
-  scoringNumbers3,
-  singleNumbers,
+  highRangeNonBullNumbers,
+  highRangeScoringNumbers,
+  middleRangePriorityNumbers,
+  middleRangeTargetNumbers,
+  NUMBERS,
 } from '@/constants/darts';
 import { NoResultError } from '@/constants/error';
 
@@ -21,9 +21,9 @@ export function calcScore(
     return calcCheckoutScore(targetScore, firstThrowList, thirdThrowList);
   }
   if (targetScore <= 235) {
-    return generateAndRankRoutes(targetScore, scoringNumbers3, numbers1);
+    return generateAndRankRoutes(targetScore, middleRangePriorityNumbers, middleRangeTargetNumbers);
   }
-  return generateAndRankRoutes(targetScore, baseNumbers, scoringNumbers2);
+  return generateAndRankRoutes(targetScore, highRangeNonBullNumbers, highRangeScoringNumbers);
 }
 
 function generateAndRankRoutes(
@@ -39,11 +39,11 @@ function generateAndRankRoutes(
         const remainScore = targetScore - first - second - third;
 
         // 3本目がブルの場合、残りスコアがnotBogyNumbersにならない場合はスキップ
-        if (bull.includes(third) && !notBogyNumbers.includes(remainScore)) {
+        if (BULL.includes(third) && !checkOutNumbers.includes(remainScore)) {
           continue;
         }
-        if (remainScore <= 170 && !bogyNumbers.includes(remainScore)) {
-          if (singleNumbers.includes(first)) {
+        if (remainScore <= 170 && !bogeyNumbers.includes(remainScore)) {
+          if (NUMBERS.includes(first)) {
             luckyNumbers.add(first);
           }
           resultList.push({
@@ -125,7 +125,7 @@ function evaluateArrangementQuality(item: EvaluatedRoute, luckyNumbers: Set<numb
     currentScore += 10;
   }
   // BULLを打つ必要があるか
-  if (bull.includes(third)) {
+  if (BULL.includes(third)) {
     currentScore += 5;
   }
   const strategySet = new Set([...luckyNumbers].flatMap((num) => [num, num * 3]));
@@ -141,7 +141,7 @@ function evaluateArrangementQuality(item: EvaluatedRoute, luckyNumbers: Set<numb
 
 // 3本全て同じエリアに投げているか判定する
 function isSameArea(numbers: number[]): boolean {
-  const reverseSingleNumbers = singleNumbers.toReversed();
+  const reverseSingleNumbers = NUMBERS.toReversed();
   for (const i of reverseSingleNumbers) {
     const isCheck = numbers.every((number) => {
       return number % i === 0 && number / i <= 3;
